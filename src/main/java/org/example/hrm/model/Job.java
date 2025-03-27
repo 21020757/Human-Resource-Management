@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.hrm.model.abstractModel.AbstractAuditingEntity;
 
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -17,11 +19,11 @@ public class Job extends AbstractAuditingEntity {
     private Long id;
     private String jobTitle;
     private String jobDescription;
-    private double salary;
+    private BigDecimal salary;
     private String position;
     private String requirements;
-    private Date postedDate;
-    private Date closedDate;
+    private LocalDate postedDate;
+    private LocalDate closedDate;
     private boolean active;
     @ManyToOne
     @JoinColumn(name = "department_id")

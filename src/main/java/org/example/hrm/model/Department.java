@@ -3,20 +3,18 @@ package org.example.hrm.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.hrm.model.abstractModel.AbstractAuditingEntity;
 
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Department extends AbstractAuditingEntity {
+public class Department {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String departmentCode;
     private String departmentName;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "employee_id")
-    private List<Employee> employees;
     @OneToOne
+    @JoinColumn(name = "manager_id")
     private Employee manager;
 }
