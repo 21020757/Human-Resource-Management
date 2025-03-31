@@ -11,6 +11,6 @@ public interface EmployeeMapper extends EntityMapper<EmployeeDto, Employee> {
     EmployeeDto toDto(Employee entity);
 
     @Override
-    @Mapping(target = "department", ignore = true)
+    @Mapping(source = "departmentName", target = "department.departmentName")
     Employee toEntity(EmployeeDto dto);
 }

@@ -5,4 +5,5 @@ import org.example.hrm.dto.EmployeeDto;
 public interface EmployeeService {
     EmployeeDto create(EmployeeDto employeeDto);
     EmployeeDto findByEmployeeId(long employeeId);
+    EmployeeDto findByEmail(String email);
 }
