@@ -22,17 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthenticationService authenticationService;
-    private final Logger logger = org.slf4j.LoggerFactory.getLogger(AuthController.class);
-    private final UserService userService;
-    private final SecurityContextLogoutHandler logoutHandler;
 
 
-    public AuthController(AuthenticationService authenticationService,
-                          UserService userService,
-                          SecurityContextLogoutHandler logoutHandler) {
+    public AuthController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.userService = userService;
-        this.logoutHandler = logoutHandler;
     }
 
     @PostMapping("/login")

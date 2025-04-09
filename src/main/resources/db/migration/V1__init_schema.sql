@@ -8,15 +8,12 @@ CREATE TABLE application
 CREATE TABLE attendance
 (
     id                 BIGINT AUTO_INCREMENT NOT NULL,
-    created_by         VARCHAR(50)           NOT NULL DEFAULT 'system',
-    created_date       datetime              NULL DEFAULT CURRENT_TIMESTAMP,
-    last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
-    last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     employee_id        BIGINT                NULL,
     date               date                  NULL,
     check_in_time      time                  NULL,
     check_out_time     time                  NULL,
-    total_working_time DECIMAL               NULL,
+    total_working_time DECIMAL(10,2)         NULL,
+    work_days          DECIMAL(10,2)         NULL,
     status             VARCHAR(255)          NULL,
     CONSTRAINT pk_attendance PRIMARY KEY (id)
 );
@@ -57,7 +54,7 @@ CREATE TABLE contract
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     start_date         date                  NULL,
     end_date           date                  NULL,
-    salary             DECIMAL               NULL,
+    salary             DECIMAL(10,2)         NULL,
     employee_id        BIGINT                NULL,
     CONSTRAINT pk_contract PRIMARY KEY (id)
 );
@@ -102,7 +99,7 @@ CREATE TABLE employee_review
     last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     date               date                  NULL,
-    score              DECIMAL               NULL,
+    score              DECIMAL(10,2)         NULL,
     employee_id        BIGINT                NULL,
     reviewer_id        BIGINT                NULL,
     comment            VARCHAR(255)          NULL,
@@ -134,7 +131,7 @@ CREATE TABLE job
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     job_title          VARCHAR(255)          NULL,
     job_description    VARCHAR(255)          NULL,
-    salary             DECIMAL               NULL,
+    salary             DECIMAL(10,2)         NULL,
     position           VARCHAR(255)          NULL,
     requirements       VARCHAR(255)          NULL,
     posted_date        date                  NULL,
@@ -191,10 +188,10 @@ CREATE TABLE salary
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     month              INT                   NOT NULL,
     year               INT                   NOT NULL,
-    base_salary        DECIMAL               NULL,
-    bonus              DECIMAL               NULL,
-    deduction          DECIMAL               NULL,
-    net_salary         DECIMAL               NULL,
+    base_salary        DECIMAL(10,2)         NULL,
+    bonus              DECIMAL(10,2)         NULL,
+    deduction          DECIMAL(10,2)         NULL,
+    net_salary         DECIMAL(10,2)         NULL,
     employee_id        BIGINT                NULL,
     CONSTRAINT pk_salary PRIMARY KEY (id)
 );

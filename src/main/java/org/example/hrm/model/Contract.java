@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.example.hrm.model.abstractModel.AbstractAuditingEntity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -18,6 +17,7 @@ public class Contract extends AbstractAuditingEntity {
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Column(precision = 10, scale = 2)
     private BigDecimal salary;
     @ManyToOne
     @JoinColumn(name = "employee_id")
