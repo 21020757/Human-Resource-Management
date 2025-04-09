@@ -1,4 +1,4 @@
-package org.example.hrm.service;
+package org.example.hrm.service.impl;
 
 import org.example.hrm.model.User;
 import org.example.hrm.repository.UserRepository;

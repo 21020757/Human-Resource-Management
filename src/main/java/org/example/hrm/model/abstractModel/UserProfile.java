@@ -1,9 +1,6 @@
 package org.example.hrm.model.abstractModel;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,10 +14,12 @@ public class UserProfile extends AbstractAuditingEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
+    @Column(unique = true)
     private String email;
     private String phone;
     private String address;
     private String gender;
     private LocalDate dateOfBirth;
+    @Column(unique = true)
     private String idNumber;
 }

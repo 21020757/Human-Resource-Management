@@ -1,5 +1,6 @@
 package org.example.hrm.constant;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 
 public final class Constants {
@@ -12,4 +13,5 @@ public final class Constants {
     public static final LocalTime CHECK_IN_DEADLINE = LocalTime.of(8, 30);
     public static final LocalTime REGULAR_CHECK_OUT_TIME = LocalTime.of(17, 30);
     public static final Long LUNCH_BREAK = 60L;
+    public static final BigDecimal MONTHLY_WORK_DAYS = BigDecimal.valueOf(22);
 }

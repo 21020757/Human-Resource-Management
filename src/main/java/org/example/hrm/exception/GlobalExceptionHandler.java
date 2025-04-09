@@ -13,27 +13,35 @@ public class GlobalExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @ExceptionHandler(ChangePasswordException.class)
     public ResponseEntity<CustomResponse> handleChangePasswordException(ChangePasswordException ex) {
-        logger.error("Handling ChangePasswordException: {}", ex.getMessage());
-        CustomResponse response = new CustomResponse(false, ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                getCustomResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
     public ResponseEntity<CustomResponse> handleEmployeeNotFoundException(EmployeeNotFoundException ex) {
-        CustomResponse customResponse = new CustomResponse(false, ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(customResponse);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                getCustomResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(CustomAuthenticationException.class)
     public ResponseEntity<CustomResponse> handleCustomAuthenticationException(CustomAuthenticationException ex) {
-        CustomResponse customResponse = new CustomResponse(false, ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(customResponse);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                getCustomResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomResponse> handleException(Exception ex) {
-        CustomResponse response = new CustomResponse(false, ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                getCustomResponse(ex.getMessage())
+        );
+    }
+
+
+    public CustomResponse getCustomResponse(String message) {
+        return CustomResponse.builder()
+                .success(false)
+                .message(message)
+                .build();
     }
 }
 

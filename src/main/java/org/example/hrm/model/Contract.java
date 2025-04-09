@@ -19,7 +19,7 @@ public class Contract extends AbstractAuditingEntity {
     private LocalDate endDate;
     @Column(precision = 10, scale = 2)
     private BigDecimal salary;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 }

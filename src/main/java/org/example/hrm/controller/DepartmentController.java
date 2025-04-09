@@ -6,6 +6,10 @@ import org.example.hrm.service.DepartmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static org.example.hrm.dto.CustomResponse.*;
+
 @RestController
 @RequestMapping("api/department")
 public class DepartmentController {
@@ -17,38 +21,44 @@ public class DepartmentController {
 
     @PostMapping
     public ResponseEntity<?> createDepartment(@RequestBody DepartmentDto dto) {
-        CustomResponse customResponse =
-                new CustomResponse(true, "Department created!", departmentService.createDepartment(dto));
-        return ResponseEntity.ok().body(customResponse);
+        DepartmentDto departmentDto = departmentService.createDepartment(dto);
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Department created successful!")
+                .data(departmentDto)
+                .build());
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateDepartment(@RequestBody DepartmentDto dto) {
         departmentService.updateDepartment(dto);
-        CustomResponse customResponse =
-                new CustomResponse(true, "Department created!", null);
-        return ResponseEntity.ok().body(customResponse);
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Department updated successful!")
+                .build());
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllDepartments() {
-        CustomResponse customResponse =
-                new CustomResponse(true, "Get all department successful!", departmentService.getAllDepartment());
-        return ResponseEntity.ok().body(customResponse);
+        List<DepartmentDto> list = departmentService.getAllDepartment();
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Get all department successful!")
+                .data(list)
+                .build());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDepartmentById(@PathVariable long id) {
-        CustomResponse customResponse =
-                new CustomResponse(true, "", departmentService.getDepartment(id));
-        return ResponseEntity.ok().body(customResponse);
+        DepartmentDto departmentDto = departmentService.getDepartment(id);
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Get department successful!")
+                .data(departmentDto)
+                .build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDepartment(@PathVariable long id) {
         departmentService.deleteDepartment(id);
-        CustomResponse customResponse =
-                new CustomResponse(true, "Department deleted!" , null);
-        return ResponseEntity.ok().body(customResponse);
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Department deleted successful!")
+                .build());
     }
 }

@@ -1,10 +1,11 @@
 package org.example.hrm.service;
 
+import org.example.hrm.dto.RoleDto;
 import org.example.hrm.model.Role;
 import org.example.hrm.model.enumeration.RoleName;
-
-import java.util.Optional;
+import java.util.Set;
 
 public interface RoleService {
-    Optional<Role> findByRoleName(RoleName roleName);
+    Role findByRoleName(RoleName roleName);
+    Set<Role> mapToEntity(Set<RoleDto> roles);
 }

@@ -1,6 +1,7 @@
 package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.ChangePasswordRequest;
+import org.example.hrm.dto.RoleDto;
 import org.example.hrm.dto.SignupRequest;
 import org.example.hrm.dto.UserDto;
 import org.example.hrm.exception.ChangePasswordException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,8 +55,7 @@ public class UserServiceImpl implements UserService {
                     .map(roleMapper::toEntity)
                     .collect(Collectors.toSet()));
         } else {
-            Role defaultRole = roleService.findByRoleName(RoleName.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Default role not found!"));
+            Role defaultRole = roleService.findByRoleName(RoleName.ROLE_USER);
             roles.add(defaultRole);
         }
         user.setRoles(roles);
@@ -66,8 +67,7 @@ public class UserServiceImpl implements UserService {
     public void autoCreate(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         Set<Role> roles = new HashSet<>();
-        Role defaultRole = roleService.findByRoleName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Default role not found!"));
+        Role defaultRole = roleService.findByRoleName(RoleName.ROLE_USER);
         roles.add(defaultRole);
 
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
@@ -95,6 +95,17 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void update(UserDto userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
+        if(user == null) {
+            throw new UsernameNotFoundException(userDto.getEmail() + " not found!");
+        }
+        Set<Role> roles = roleService.mapToEntity(userDto.getRoles());
+        user.setRoles(roles);
         userRepository.save(user);
     }
 }
