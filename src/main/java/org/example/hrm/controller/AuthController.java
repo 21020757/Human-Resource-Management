@@ -29,22 +29,24 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<CustomResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         authenticationService.login(loginRequest, response);
-        return ResponseEntity.ok(new CustomResponse(true, "Login successfully!", null));
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Login successful!").build()
+        );
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest, HttpServletRequest request){
         authenticationService.registerAccount(signupRequest);
-        return ResponseEntity.ok(
-                new CustomResponse(true,
-                    "Account successfully registered for email: " + signupRequest.getEmail(), null));
+        return ResponseEntity.ok(CustomResponse.builder()
+                .message("Account successfully registered for email: "  + signupRequest.getEmail())
+                .build());
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser(HttpServletResponse response) {
         authenticationService.logoutUser(response);
-        return ResponseEntity.ok(new CustomResponse(true, "Logout successfully!", null));
+        return ResponseEntity.ok(CustomResponse.builder().message("Logout successful!").build());
     }
 }

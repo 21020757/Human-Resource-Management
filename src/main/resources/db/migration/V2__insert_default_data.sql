@@ -21,11 +21,11 @@ INSERT INTO department (department_code, department_name) VALUES
                                                    ('RND', 'Research & Development'),
                                                    ('CS', 'Customer Support'),
                                                    ('PR', 'Public Relations');
-INSERT INTO employee (full_name, email, phone, address, gender, date_of_birth, id_number, employee_code, position, hire_date, contract_type, working_status, department_id) VALUES
-                    ('Nguyen Dang Duong', 'soi123', '0859039596', '123 ngo gia tu bac ninh', 'Nam', '2003-05-07', '123', 'IT1', 'BE dev', '2024-05-03', 'FULL_TIME', 'ACTIVE', '2'),
-                    ('Nguyen Viet Anh', 'va123', '0859039591', '123 ngo gia tu bac ninh', 'Nam', '2003-05-06', '123', 'IT2', 'BE dev', '2024-05-03', 'FULL_TIME', 'ACTIVE', '1');
+INSERT INTO employee (full_name, email, phone, address, gender, date_of_birth, id_number, employee_code, position, hire_date, contract_type, active, department_id) VALUES
+                    ('Nguyen Dang Duong', 'soi123', '0859039596', '123 ngo gia tu bac ninh', 'Nam', '2003-05-07', '123', 'IT1', 'BE dev', '2024-05-03', 'FULL_TIME', true, '2'),
+                    ('Nguyen Viet Anh', 'va123', '0859039591', '123 ngo gia tu bac ninh', 'Nam', '2003-05-06', '1234', 'IT2', 'BE dev', '2024-05-03', 'FULL_TIME', true, '1');
 
-
+INSERT INTO contract(salary, employee_id) VALUES (12000000, 1), (20000000, 2);
 
 INSERT INTO user (id, full_name, email, password)
 VALUES

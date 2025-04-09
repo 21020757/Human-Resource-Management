@@ -24,9 +24,9 @@ public class Interview extends AbstractAuditingEntity {
     private LocalTime time;
     private String location;
     private String notes;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee interviewer;
-    @ManyToMany(mappedBy = "interviews")
+    @ManyToMany(mappedBy = "interviews", fetch = FetchType.LAZY)
     private Set<Candidate> candidates;
 }

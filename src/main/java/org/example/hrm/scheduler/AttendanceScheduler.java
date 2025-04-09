@@ -1,4 +1,4 @@
-package org.example.hrm.cronjob;
+package org.example.hrm.scheduler;
 
 import org.example.hrm.model.Attendance;
 import org.example.hrm.model.Employee;
@@ -24,7 +24,7 @@ public class AttendanceScheduler {
     @Scheduled(cron = "0 0 0 * * ?")
     public void createDailyAttendance() {
         LocalDate today = LocalDate.now();
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findAllByActive(true);
         for (Employee employee : employees) {
             boolean exists = attendanceRepository.existsByEmployeeAndDate(employee, today);
             if(!exists) {

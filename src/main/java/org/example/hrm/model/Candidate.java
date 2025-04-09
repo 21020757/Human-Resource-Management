@@ -15,13 +15,13 @@ public class Candidate extends UserProfile {
     private String resume;
     private String cvLetter;
     private LocalDate appliedDate;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "candidate_interview",
             joinColumns = @JoinColumn(name = "candidate_id"),
             inverseJoinColumns = @JoinColumn(name = "interview_id"))
     private Set<Interview> interviews;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "application",
             joinColumns = @JoinColumn(name = "candidate_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))

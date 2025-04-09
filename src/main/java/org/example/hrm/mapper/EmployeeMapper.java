@@ -7,10 +7,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper extends EntityMapper<EmployeeDto, Employee> {
     @Override
-    @Mapping(source = "department.departmentName", target = "departmentName")
+    @Mapping(source = "department.id", target = "departmentId")
     EmployeeDto toDto(Employee entity);
 
     @Override
-    @Mapping(source = "departmentName", target = "department.departmentName")
+    @Mapping(source = "departmentId", target = "department.id")
     Employee toEntity(EmployeeDto dto);
 }

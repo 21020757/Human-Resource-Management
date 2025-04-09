@@ -35,7 +35,8 @@ CREATE TABLE candidate
     resume             VARCHAR(255)          NULL,
     cv_letter          VARCHAR(255)          NULL,
     applied_date       date                  NULL,
-    CONSTRAINT pk_candidate PRIMARY KEY (id)
+    CONSTRAINT pk_candidate PRIMARY KEY (id),
+    FULLTEXT(full_name)
 );
 
 CREATE TABLE candidate_interview
@@ -86,9 +87,10 @@ CREATE TABLE employee
     position           VARCHAR(255)          NULL,
     hire_date          date                  NULL,
     contract_type      VARCHAR(255)          NULL,
-    working_status     VARCHAR(255)          NULL,
     department_id      BIGINT                NULL,
-    CONSTRAINT pk_employee PRIMARY KEY (id)
+    active             BIT(1)                NOT NULL DEFAULT b'1',
+    CONSTRAINT pk_employee PRIMARY KEY (id),
+    FULLTEXT(full_name, position)
 );
 
 CREATE TABLE employee_review
@@ -136,9 +138,10 @@ CREATE TABLE job
     requirements       VARCHAR(255)          NULL,
     posted_date        date                  NULL,
     closed_date        date                  NULL,
-    active             BIT(1)                NOT NULL,
+    active             BIT(1)                NOT NULL DEFAULT b'1',
     department_id      BIGINT                NULL,
-    CONSTRAINT pk_job PRIMARY KEY (id)
+    CONSTRAINT pk_job PRIMARY KEY (id),
+    FULLTEXT(job_description)
 );
 
 CREATE TABLE report
@@ -221,6 +224,12 @@ ALTER TABLE department
 
 ALTER TABLE user
     ADD CONSTRAINT uc_user_email UNIQUE (email);
+
+ALTER TABLE employee
+    ADD CONSTRAINT uc_employee_email UNIQUE (email);
+
+ALTER TABLE employee
+    ADD CONSTRAINT uc_employee_id_number UNIQUE (id_number);
 
 ALTER TABLE attendance
     ADD CONSTRAINT FK_ATTENDANCE_ON_EMPLOYEE FOREIGN KEY (employee_id) REFERENCES employee (id);

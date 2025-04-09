@@ -9,4 +9,5 @@ public interface UserService {
     void autoCreate(UserDto userDto);
     Boolean existsByEmail(String email);
     void changePassword(String email, ChangePasswordRequest request);
+    void update(UserDto userDto);
 }

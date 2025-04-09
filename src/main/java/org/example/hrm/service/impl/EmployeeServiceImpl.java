@@ -6,17 +6,18 @@ import org.example.hrm.dto.EmployeeDto;
 import org.example.hrm.exception.EmployeeNotFoundException;
 import org.example.hrm.mapper.DepartmentMapper;
 import org.example.hrm.mapper.EmployeeMapper;
-import org.example.hrm.model.Department;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.event.EmployeeCreatedEvent;
-import org.example.hrm.repository.DepartmentRepository;
 import org.example.hrm.repository.EmployeeRepository;
 import org.example.hrm.service.DepartmentService;
 import org.example.hrm.service.EmployeeService;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -42,12 +43,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto create(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.toEntity(employeeDto);
-        DepartmentDto departmentDto = departmentService.getDepartmentByName(employeeDto.getDepartmentName());
+        DepartmentDto departmentDto = departmentService.getDepartment(employeeDto.getDepartmentId());
         employee.setDepartment(departmentMapper.toEntity(departmentDto));
         employee.setHireDate(LocalDate.now());
+        employee.setActive(true);
         eventPublisher.publishEvent(new EmployeeCreatedEvent(employeeDto));
         employeeRepository.save(employee);
-        employee.setEmployeeCode(employee.getDepartment().getDepartmentCode() + employee.getId());
+        List<Employee> employees = employeeRepository.getAllEmployeeByDepartmentId(employeeDto.getDepartmentId());
+        employee.setEmployeeCode(employee.getDepartment().getDepartmentCode() + employees.size());
 
         return employeeMapper.toDto(employee);
     }
@@ -64,5 +67,30 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto findByEmail(String email) {
         return employeeMapper.toDto(employeeRepository.findEmployeeByEmail(email));
+    }
+
+    @Override
+    public void update(EmployeeDto employeeDto) {
+        Employee employee = employeeRepository.findEmployeeByEmail(employeeDto.getEmail());
+        employeeMapper.partialUpdate(employee, employeeDto);
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public void delete(long employeeId) {
+        employeeRepository.deleteById(employeeId);
+    }
+
+    @Override
+    public Page<EmployeeDto> search (String keyword,
+                                     String position,
+                                     Long departmentId,
+                                     boolean active,
+                                     Pageable pageable) {
+        Page<Employee> page;
+        if (keyword == null && position == null && departmentId == null) {
+            page = employeeRepository.findAll(pageable);
+        } else page = employeeRepository.search(keyword, position, departmentId, active, pageable);
+        return page.map(employeeMapper::toDto);
     }
 }

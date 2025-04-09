@@ -24,7 +24,7 @@ public class Salary extends AbstractAuditingEntity {
     private BigDecimal deduction;
     @Column(precision = 10, scale = 2)
     private BigDecimal netSalary;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 }
