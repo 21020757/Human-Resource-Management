@@ -22,7 +22,7 @@ public class AttendanceScheduler {
     }
 
     @Scheduled(cron = "0 0 0 * * ?")
-    public void createDailyAttendance() {
+    public void initDailyAttendance() {
         LocalDate today = LocalDate.now();
         List<Employee> employees = employeeRepository.findAllByActive(true);
         for (Employee employee : employees) {

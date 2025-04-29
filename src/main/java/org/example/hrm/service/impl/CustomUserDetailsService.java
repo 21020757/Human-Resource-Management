@@ -1,5 +1,6 @@
 package org.example.hrm.service.impl;
 
+import org.example.hrm.exception.UserIsDisabledException;
 import org.example.hrm.model.User;
 import org.example.hrm.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,12 +20,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println(email + " checking user");
+    public UserDetails loadUserByUsername(String email) throws RuntimeException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(email + " not found." ));
+                .orElseThrow(() -> new UsernameNotFoundException("Email không tồn tại: " + email));
 
+        if (!user.isActive()) {
+            throw new UserIsDisabledException("Tài khoản đã bị vô hiệu hóa: " + email);
+        }
         Set<GrantedAuthority> authorities = user
                 .getRoles()
                 .stream()

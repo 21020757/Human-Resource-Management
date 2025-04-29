@@ -6,14 +6,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.hrm.dto.LoginRequest;
 import org.example.hrm.dto.SignupRequest;
 import org.example.hrm.exception.CustomAuthenticationException;
+import org.example.hrm.exception.UserIsDisabledException;
 import org.example.hrm.util.JwtUtils;
 import org.example.hrm.service.AuthenticationService;
 import org.example.hrm.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,8 +48,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             jwtUtils.setTokenCookies(accessToken, refreshToken, response);
             UserDetails userDetails = (UserDetails) authenticationResponse.getPrincipal();
             return userDetails.getUsername();
-        } catch (Exception e) {
-            throw new CustomAuthenticationException("Wrong email or password!");
+        } catch (InternalAuthenticationServiceException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof UserIsDisabledException) {
+                throw (UserIsDisabledException) cause;
+            }
+            throw new UserIsDisabledException("Email bị vô hiệu hóa!");
+        } catch (UsernameNotFoundException e) {
+            throw new UsernameNotFoundException("Email không tồn tại!");
+        } catch (BadCredentialsException e) {
+            throw new CustomAuthenticationException("Sai mật khẩu!");
         }
     }
 

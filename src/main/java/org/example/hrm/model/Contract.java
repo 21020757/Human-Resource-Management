@@ -22,4 +22,5 @@ public class Contract extends AbstractAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
+    private Boolean active = true;
 }

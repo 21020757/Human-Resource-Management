@@ -13,9 +13,9 @@ public class PayrollScheduler {
     }
 
     @Scheduled(cron = "0 0 0 1 * *")
-    public void createMonthlySalary() {
+    public void initMonthlySalary() {
         try {
-            payrollService.createMonthlySalary();
+            payrollService.initMonthlySalary();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

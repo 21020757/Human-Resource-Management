@@ -29,12 +29,21 @@ public class GlobalExceptionHandler {
                 getCustomResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(UserIsDisabledException.class)
+    public ResponseEntity<CustomResponse> handleUserIsDisabledException(UserIsDisabledException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                getCustomResponse(ex.getMessage())
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomResponse> handleException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 getCustomResponse(ex.getMessage())
         );
     }
+
+
 
 
     public CustomResponse getCustomResponse(String message) {

@@ -43,6 +43,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getById(long id) {
+        User user = userRepository.getById(id);
+        return userMapper.toDto(user);
+    }
+
+    @Override
+    public List<UserDto> getAll() {
+        List<User> users = userRepository.findAll();
+        return userMapper.toDto(users);
+    }
+
+    @Override
     public UserDto create(SignupRequest signupRequest) {
         User user = new User();
         user.setFullName(signupRequest.getName());
@@ -73,7 +85,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(DEFAULT_PASSWORD));
         user.setRoles(roles);
         userRepository.save(user);
-        userMapper.toDto(user);
     }
 
     @Override
@@ -104,8 +115,14 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             throw new UsernameNotFoundException(userDto.getEmail() + " not found!");
         }
-        Set<Role> roles = roleService.mapToEntity(userDto.getRoles());
-        user.setRoles(roles);
+        userMapper.partialUpdate(user, userDto);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        user.setActive(false);
         userRepository.save(user);
     }
 }

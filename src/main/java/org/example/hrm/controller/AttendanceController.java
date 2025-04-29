@@ -43,9 +43,9 @@ public class AttendanceController {
             @RequestParam(required = false) AttendanceStatus status,
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable) {
         String email = principal.getName();
-        EmployeeDto employee = employeeService.findByEmail(email);
-        Page<AttendanceDto> page = attendanceService.findByFilters(employee.getId(),
-                month, year, status, pageable);
+        EmployeeDto employeeDto = employeeService.findByEmail(email);
+        Page<AttendanceDto> page = attendanceService.findByFilters(
+                employeeDto.getId(), month, year, status, pageable);
         return ResponseEntity.ok(CustomResponse.builder()
                 .data(page.getContent())
                 .metadata(CommonUtils.buildMetadata(page, pageable))
@@ -53,7 +53,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/by-employee/{employeeId}")
-    public ResponseEntity<?> getAllRecordByFilter(
+    public ResponseEntity<?> getAllRecordsByEmployeeId(
             @PathVariable Long employeeId,
             @RequestParam(defaultValue = "#{T(java.time.Year).now().value}") int year,
             @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().monthValue}") int month,
