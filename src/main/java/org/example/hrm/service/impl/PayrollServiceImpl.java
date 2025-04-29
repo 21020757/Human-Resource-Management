@@ -42,7 +42,7 @@ public class PayrollServiceImpl implements PayrollService {
     }
 
     @Override
-    public void createMonthlySalary() {
+    public void initMonthlySalary() {
         List<Employee> employees = employeeRepository.findAllByActive(true);
         for (Employee employee : employees) {
             int month = LocalDate.now().getMonthValue();

@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         authenticationService.login(loginRequest, response);
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Login successful!").build()
+                .message("Đăng nhập thành công!").build()
         );
     }
 
@@ -40,13 +40,13 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest, HttpServletRequest request){
         authenticationService.registerAccount(signupRequest);
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Account successfully registered for email: "  + signupRequest.getEmail())
+                .message("Đăng ký tài khoản thành công cho email: "  + signupRequest.getEmail())
                 .build());
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser(HttpServletResponse response) {
         authenticationService.logoutUser(response);
-        return ResponseEntity.ok(CustomResponse.builder().message("Logout successful!").build());
+        return ResponseEntity.ok(CustomResponse.builder().message("Đăng xuất thành công!").build());
     }
 }

@@ -23,7 +23,6 @@ public class DepartmentController {
     public ResponseEntity<?> createDepartment(@RequestBody DepartmentDto dto) {
         DepartmentDto departmentDto = departmentService.createDepartment(dto);
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Department created successful!")
                 .data(departmentDto)
                 .build());
     }
@@ -32,7 +31,6 @@ public class DepartmentController {
     public ResponseEntity<?> updateDepartment(@RequestBody DepartmentDto dto) {
         departmentService.updateDepartment(dto);
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Department updated successful!")
                 .build());
     }
 
@@ -40,7 +38,6 @@ public class DepartmentController {
     public ResponseEntity<?> getAllDepartments() {
         List<DepartmentDto> list = departmentService.getAllDepartment();
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Get all department successful!")
                 .data(list)
                 .build());
     }
@@ -49,7 +46,6 @@ public class DepartmentController {
     public ResponseEntity<?> getDepartmentById(@PathVariable long id) {
         DepartmentDto departmentDto = departmentService.getDepartment(id);
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Get department successful!")
                 .data(departmentDto)
                 .build());
     }
@@ -58,7 +54,6 @@ public class DepartmentController {
     public ResponseEntity<?> deleteDepartment(@PathVariable long id) {
         departmentService.deleteDepartment(id);
         return ResponseEntity.ok(CustomResponse.builder()
-                .message("Department deleted successful!")
                 .build());
     }
 }

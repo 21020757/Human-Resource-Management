@@ -24,7 +24,7 @@ public class EmployeeEventListener {
         UserDto userDto = new UserDto();
         userDto.setEmail(employeeDto.getEmail());
         userDto.setFullName(employeeDto.getFullName());
-
+        userDto.setActive(employeeDto.isActive());
         return userDto;
     }
 }

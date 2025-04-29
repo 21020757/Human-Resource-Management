@@ -9,11 +9,11 @@ public interface EmployeeService {
     EmployeeDto create(EmployeeDto employeeDto);
     EmployeeDto findByEmployeeId(long employeeId);
     EmployeeDto findByEmail(String email);
-    void update(EmployeeDto employeeDto);
-    void delete(long employeeId);
+    void update(Long id, EmployeeDto employeeDto);
+    void delete(Long employeeId);
     Page<EmployeeDto> search(String keyword,
                              String position,
                              Long departmentId,
-                             boolean active,
+                             Boolean active,
                              Pageable pageable);
 }

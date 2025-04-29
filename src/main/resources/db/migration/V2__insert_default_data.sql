@@ -27,15 +27,15 @@ INSERT INTO employee (full_name, email, phone, address, gender, date_of_birth, i
 
 INSERT INTO contract(salary, employee_id) VALUES (12000000, 1), (20000000, 2);
 
-INSERT INTO user (id, full_name, email, password)
+INSERT INTO user (id, full_name, active, email, password)
 VALUES
-(1, 'Dang Duong', 'admin1', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
-(2, 'Viet Anh', 'admin2', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
-(3, 'Duy Anh', 'admin3', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
-(4, 'Ngoc Linh', 'user1', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
-(5, 'Thanh An', 'user2', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
-(6, 'employee test 1', 'soi123', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
-(7, 'employee test 2', 'va123', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK');
+(1, 'Dang Duong', true, 'admin1', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
+(2, 'Viet Anh', true, 'admin2', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
+(3, 'Duy Anh', true, 'admin3', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
+(4, 'Ngoc Linh', true,'user1', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
+(5, 'Thanh An', true, 'user2', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
+(6, 'employee test 1', true, 'soi123', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK'),
+(7, 'employee test 2', true, 'va123', '$2a$12$.4154E2FbWPMqoElrptIR.sjID1w/gyIs3mHa3sTB8vRcom3qFvVK');
 
 
 

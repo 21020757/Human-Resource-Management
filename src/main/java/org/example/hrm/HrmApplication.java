@@ -23,7 +23,7 @@ public class HrmApplication {
 
 	@PostConstruct
 	public void init() {
-		attendanceScheduler.createDailyAttendance();
-		payrollScheduler.createMonthlySalary();
+		attendanceScheduler.initDailyAttendance();
+		payrollScheduler.initMonthlySalary();
 	}
 }

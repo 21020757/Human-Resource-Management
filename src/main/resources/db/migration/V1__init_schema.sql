@@ -57,6 +57,7 @@ CREATE TABLE contract
     end_date           date                  NULL,
     salary             DECIMAL(10,2)         NULL,
     employee_id        BIGINT                NULL,
+    active             BIT(1)                NOT NULL DEFAULT b'1',
     CONSTRAINT pk_contract PRIMARY KEY (id)
 );
 
@@ -182,6 +183,7 @@ CREATE TABLE `role`
     CONSTRAINT pk_role PRIMARY KEY (id)
 );
 
+-- Index for efficient querying of history for a specific contract
 CREATE TABLE salary
 (
     id                 BIGINT AUTO_INCREMENT NOT NULL,
@@ -209,6 +211,7 @@ CREATE TABLE user
     full_name          VARCHAR(255)          NULL,
     email              VARCHAR(255)          NOT NULL,
     password           VARCHAR(255)          NOT NULL,
+    active             BIT(1)                DEFAULT b'1',
     CONSTRAINT pk_user PRIMARY KEY (id)
 );
 

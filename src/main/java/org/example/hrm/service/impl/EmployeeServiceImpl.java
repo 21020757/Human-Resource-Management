@@ -3,6 +3,7 @@ package org.example.hrm.service.impl;
 import jakarta.transaction.Transactional;
 import org.example.hrm.dto.DepartmentDto;
 import org.example.hrm.dto.EmployeeDto;
+import org.example.hrm.dto.UserDto;
 import org.example.hrm.exception.EmployeeNotFoundException;
 import org.example.hrm.mapper.DepartmentMapper;
 import org.example.hrm.mapper.EmployeeMapper;
@@ -11,9 +12,12 @@ import org.example.hrm.model.event.EmployeeCreatedEvent;
 import org.example.hrm.repository.EmployeeRepository;
 import org.example.hrm.service.DepartmentService;
 import org.example.hrm.service.EmployeeService;
+import org.example.hrm.service.UserService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -26,17 +30,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final ApplicationEventPublisher eventPublisher;
     private final DepartmentMapper departmentMapper;
     private final DepartmentService departmentService;
+    private final UserService userService;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository,
                                EmployeeMapper employeeMapper,
                                ApplicationEventPublisher eventPublisher,
                                DepartmentMapper departmentMapper,
-                               DepartmentService departmentService) {
+                               DepartmentService departmentService, UserService userService) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.eventPublisher = eventPublisher;
         this.departmentMapper = departmentMapper;
         this.departmentService = departmentService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -70,27 +76,46 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void update(EmployeeDto employeeDto) {
-        Employee employee = employeeRepository.findEmployeeByEmail(employeeDto.getEmail());
+    public void update(Long id, EmployeeDto employeeDto) {
+        Employee employee = employeeRepository.findById(id).orElseThrow();
+        if(employeeDto.isActive() != employee.isActive()) {
+            UserDto userDto = new UserDto();
+            userDto.setEmail(employee.getEmail());
+            userDto.setActive(employeeDto.isActive());
+            userService.update(userDto);
+        }
         employeeMapper.partialUpdate(employee, employeeDto);
         employeeRepository.save(employee);
     }
 
     @Override
-    public void delete(long employeeId) {
-        employeeRepository.deleteById(employeeId);
+    public void delete(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+        employee.setActive(false);
+        employeeRepository.save(employee);
+        userService.deleteByEmail(employee.getEmail());
     }
 
     @Override
     public Page<EmployeeDto> search (String keyword,
                                      String position,
                                      Long departmentId,
-                                     boolean active,
+                                     Boolean active,
                                      Pageable pageable) {
         Page<Employee> page;
-        if (keyword == null && position == null && departmentId == null) {
+        if (isNoFilter(keyword, position, departmentId)) {
             page = employeeRepository.findAll(pageable);
-        } else page = employeeRepository.search(keyword, position, departmentId, active, pageable);
+        } else {
+            pageable = PageRequest.of(pageable.getPageNumber(),
+                    pageable.getPageSize(), Sort.Direction.ASC, "full_name");
+            page = employeeRepository.search(keyword, position, departmentId, active, pageable);
+        }
         return page.map(employeeMapper::toDto);
+    }
+
+    private boolean isNoFilter(String keyword, String position, Long departmentId) {
+        return (keyword == null || keyword.isBlank()) &&
+                (position == null || position.isBlank()) &&
+                departmentId == null;
     }
 }
