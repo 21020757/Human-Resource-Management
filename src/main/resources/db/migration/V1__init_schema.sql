@@ -32,7 +32,7 @@ CREATE TABLE candidate
     created_date       datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
-    resume             VARCHAR(255)          NULL,
+    resume             LONGTEXT              NULL,
     cv_letter          VARCHAR(255)          NULL,
     applied_date       date                  NULL,
     CONSTRAINT pk_candidate PRIMARY KEY (id),
@@ -174,8 +174,9 @@ CREATE TABLE request
     start_time         time                  NULL,
     end_time           time                  NULL,
     note               VARCHAR(255)          NULL,
-    status             VARCHAR(100)          NOT NULL DEFAULT 'PENDING',
-    approved           BIT(1)                NOT NULL,
+    comment            VARCHAR(255)          NULL,
+    status             VARCHAR(100)          NULL DEFAULT 'PENDING',
+    approved           BIT(1)                NULL,
     CONSTRAINT pk_request PRIMARY KEY (id)
 );
 

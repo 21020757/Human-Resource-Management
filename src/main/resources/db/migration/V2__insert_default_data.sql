@@ -4,7 +4,7 @@ SELECT 'ROLE_ADMIN'
 
 INSERT INTO role (name)
 SELECT 'ROLE_USER'
-    WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'ROLE_STAFF');
+    WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'ROLE_USER');
 
 INSERT INTO role (name)
 SELECT 'ROLE_MANAGER'
@@ -44,4 +44,6 @@ INSERT INTO user_roles (user_id, roles_id) VALUES
 (2, 1),
 (3, 1),
 (4, 2),
-(5, 2);
+(5, 2),
+(6, 2),
+(7, 2)

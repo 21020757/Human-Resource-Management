@@ -2,6 +2,7 @@ package org.example.hrm.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -15,7 +16,7 @@ public class CandidateDto {
     private String gender;
     private LocalDate dateOfBirth;
     private String idNumber;
-    private String resume;
+    private MultipartFile resume;
     private String cvLetter;
     private LocalDate appliedDate;
     private Long jobId;
