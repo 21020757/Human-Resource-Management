@@ -28,6 +28,7 @@ public class Request extends AbstractAuditingEntity {
     private LocalTime startTime;
     private LocalTime endTime;
     private String note;
+    private String comment;
     @Enumerated(jakarta.persistence.EnumType.STRING)
     private RequestStatus status;
     private boolean approved;

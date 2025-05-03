@@ -10,7 +10,9 @@ import org.example.hrm.dto.UserDto;
 import org.example.hrm.exception.CustomAuthenticationException;
 import org.example.hrm.exception.UserIsDisabledException;
 import org.example.hrm.model.CustomUserDetails;
+import org.example.hrm.model.Employee;
 import org.example.hrm.model.User;
+import org.example.hrm.service.EmployeeService;
 import org.example.hrm.util.JwtUtils;
 import org.example.hrm.service.AuthenticationService;
 import org.example.hrm.service.UserService;
@@ -28,13 +30,15 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final EmployeeService employeeService;
     private final JwtUtils jwtUtils;
 
     public AuthenticationServiceImpl(AuthenticationManager authenticationManager,
-                                     UserService userService,
+                                     UserService userService, EmployeeService employeeService,
                                      JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.employeeService = employeeService;
         this.jwtUtils = jwtUtils;
     }
 
@@ -51,7 +55,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             jwtUtils.setTokenCookies(accessToken, refreshToken, response);
             CustomUserDetails userDetails = (CustomUserDetails) authenticationResponse.getPrincipal();
-            return new LoginRes(userDetails.getUser());
+            String position = employeeService.findByEmail(loginRequest.getEmail()).getPosition();
+            return new LoginRes(userDetails.getUser(), position);
         } catch (InternalAuthenticationServiceException e) {
             Throwable cause = e.getCause();
             if (cause instanceof UserIsDisabledException) {

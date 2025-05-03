@@ -1,5 +1,6 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Report extends AbstractAuditingEntity {
     @Enumerated(EnumType.STRING)
     private ReportType reportType;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "employee_id")
     private Employee reporter;
 }
