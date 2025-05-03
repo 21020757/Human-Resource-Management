@@ -1,5 +1,6 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +17,14 @@ public class Candidate extends UserProfile {
     private String cvLetter;
     private LocalDate appliedDate;
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(name = "candidate_interview",
             joinColumns = @JoinColumn(name = "candidate_id"),
             inverseJoinColumns = @JoinColumn(name = "interview_id"))
     private Set<Interview> interviews;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(name = "application",
             joinColumns = @JoinColumn(name = "candidate_id"),
             inverseJoinColumns = @JoinColumn(name = "job_id"))

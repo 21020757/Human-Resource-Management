@@ -2,6 +2,7 @@ package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.DepartmentDto;
 import org.example.hrm.mapper.DepartmentMapper;
+import org.example.hrm.model.Department;
 import org.example.hrm.repository.DepartmentRepository;
 import org.example.hrm.service.DepartmentService;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDto getDepartment(Long id) {
-        return departmentMapper.toDto(departmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Department not found")));
+    public Department getDepartment(Long id) {
+        return departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found"));
     }
 
     @Override

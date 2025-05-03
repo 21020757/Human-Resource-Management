@@ -152,6 +152,21 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.20.1</version>
+				<configuration>
+					<url>jdbc:mysql://localhost:3306/hrm</url>
+					<user>root</user>
+					<password>Soi07052003@</password>
+					<locations>
+						<location>classpath:db/migration</location>
+					</locations>
+					<baselineOnMigrate>true</baselineOnMigrate>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

@@ -5,6 +5,8 @@ import org.example.hrm.constant.WorkLocation;
 import org.example.hrm.dto.AttendanceDto;
 import org.example.hrm.dto.AttendanceRequest;
 import org.example.hrm.dto.AttendanceResponse;
+import org.example.hrm.exception.CoreErrorCode;
+import org.example.hrm.exception.CoreException;
 import org.example.hrm.mapper.AttendanceMapper;
 import org.example.hrm.model.Attendance;
 import org.example.hrm.model.enumeration.AttendanceStatus;
@@ -49,7 +51,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         BigDecimal totalHours = calculateTotalHours(attendance.getCheckInTime(), attendanceDto.getCheckOutTime());
         attendance.setTotalWorkingTime(totalHours);
         attendance.setWorkDays(calculateWorkdays(totalHours));
-        attendance.setStatus(AttendanceStatus.ON_TIME);
+        attendance.setStatus(attendanceDto.getStatus());
         attendanceRepository.save(attendance);
     }
 
@@ -84,7 +86,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         double lng = checkin.getLongitude();
         LocalTime checkInTime = checkin.getTime();
         if (validateDistance(lat, lng, officeLat, officeLng, ACCEPTABLE_DISTANCE)) {
-            throw new RuntimeException("Check-in failed! You're out of acceptable distance!");
+            throw new CoreException(CoreErrorCode.OUT_OF_RANGE);
         }
         attendance.setCheckInTime(checkInTime);
         AttendanceStatus attendanceStatus = Duration.between(checkInTime, CHECK_IN_DEADLINE).toMinutes() < 10 ?

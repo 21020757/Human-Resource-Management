@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(CoreException.class)
+    public ResponseEntity<CustomResponse> handleAppException(CoreException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(
+                getCustomResponse(ex.getMessage()));
+    }
+
     @ExceptionHandler(ChangePasswordException.class)
     public ResponseEntity<CustomResponse> handleChangePasswordException(ChangePasswordException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -42,8 +49,6 @@ public class GlobalExceptionHandler {
                 getCustomResponse(ex.getMessage())
         );
     }
-
-
 
 
     public CustomResponse getCustomResponse(String message) {

@@ -7,6 +7,7 @@ import org.example.hrm.dto.UserDto;
 import org.example.hrm.exception.EmployeeNotFoundException;
 import org.example.hrm.mapper.DepartmentMapper;
 import org.example.hrm.mapper.EmployeeMapper;
+import org.example.hrm.model.Department;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.event.EmployeeCreatedEvent;
 import org.example.hrm.repository.EmployeeRepository;
@@ -49,8 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto create(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.toEntity(employeeDto);
-        DepartmentDto departmentDto = departmentService.getDepartment(employeeDto.getDepartmentId());
-        employee.setDepartment(departmentMapper.toEntity(departmentDto));
+        Department department = departmentService.getDepartment(employeeDto.getDepartmentId());
+        employee.setDepartment(department);
         employee.setHireDate(LocalDate.now());
         employee.setActive(true);
         eventPublisher.publishEvent(new EmployeeCreatedEvent(employeeDto));
@@ -62,17 +63,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto findByEmployeeId(long employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
+    public Employee findByEmployeeId(long employeeId) {
+        return employeeRepository.findById(employeeId)
                 .orElseThrow(()
                         -> new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.")
         );
-        return employeeMapper.toDto(employee);
     }
 
     @Override
-    public EmployeeDto findByEmail(String email) {
-        return employeeMapper.toDto(employeeRepository.findEmployeeByEmail(email));
+    public Employee findByEmail(String email) {
+        return employeeRepository.findEmployeeByEmail(email);
     }
 
     @Override

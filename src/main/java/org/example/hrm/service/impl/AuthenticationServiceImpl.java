@@ -4,9 +4,13 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.hrm.dto.LoginRequest;
+import org.example.hrm.dto.LoginRes;
 import org.example.hrm.dto.SignupRequest;
+import org.example.hrm.dto.UserDto;
 import org.example.hrm.exception.CustomAuthenticationException;
 import org.example.hrm.exception.UserIsDisabledException;
+import org.example.hrm.model.CustomUserDetails;
+import org.example.hrm.model.User;
 import org.example.hrm.util.JwtUtils;
 import org.example.hrm.service.AuthenticationService;
 import org.example.hrm.service.UserService;
@@ -35,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String login(LoginRequest loginRequest, HttpServletResponse response) {
+    public LoginRes login(LoginRequest loginRequest, HttpServletResponse response) {
         try {
             Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(
                     loginRequest.getEmail(), loginRequest.getPassword()
@@ -46,8 +50,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String refreshToken = jwtUtils.generateRefreshToken(loginRequest.getEmail());
 
             jwtUtils.setTokenCookies(accessToken, refreshToken, response);
-            UserDetails userDetails = (UserDetails) authenticationResponse.getPrincipal();
-            return userDetails.getUsername();
+            CustomUserDetails userDetails = (CustomUserDetails) authenticationResponse.getPrincipal();
+            return new LoginRes(userDetails.getUser());
         } catch (InternalAuthenticationServiceException e) {
             Throwable cause = e.getCause();
             if (cause instanceof UserIsDisabledException) {

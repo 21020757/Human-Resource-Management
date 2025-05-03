@@ -4,11 +4,10 @@ import org.example.hrm.dto.ChangePasswordRequest;
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.UserDto;
 import org.example.hrm.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,8 +21,8 @@ public class UserController {
 
     @PutMapping(value = "/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request,
-                                                         Principal principal) {
-        userService.changePassword(principal.getName(), request);
+                                                         Authentication authentication) {
+        userService.changePassword(authentication.getName(), request);
         return ResponseEntity.ok(
                 CustomResponse.builder().message("Password changed successful!").build());
     }

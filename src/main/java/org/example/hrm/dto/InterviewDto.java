@@ -16,5 +16,5 @@ public class InterviewDto {
     private String location;
     private String notes;
     private Long interviewerId;
-    private Set<CandidateDto> candidateDtos;
+    private Set<Long> candidateIds;
 }

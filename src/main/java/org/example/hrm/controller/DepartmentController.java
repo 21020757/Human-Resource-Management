@@ -2,6 +2,7 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.DepartmentDto;
+import org.example.hrm.model.Department;
 import org.example.hrm.service.DepartmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +45,9 @@ public class DepartmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDepartmentById(@PathVariable long id) {
-        DepartmentDto departmentDto = departmentService.getDepartment(id);
+        Department department = departmentService.getDepartment(id);
         return ResponseEntity.ok(CustomResponse.builder()
-                .data(departmentDto)
+                .data(department)
                 .build());
     }
 
