@@ -1,7 +1,9 @@
 package org.example.hrm.service;
 
 import org.example.hrm.dto.InterviewDto;
+import org.example.hrm.model.Interview;
 
 public interface InterviewService {
-    void create(InterviewDto interviewDto);
+    Interview create(InterviewDto interviewDto);
+    void update(InterviewDto interviewDto);
 }

@@ -3,6 +3,7 @@ package org.example.hrm.controller;
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.EmployeeDto;
 import org.example.hrm.dto.Metadata;
+import org.example.hrm.model.Employee;
 import org.example.hrm.service.EmployeeService;
 import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
@@ -24,9 +25,17 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable Long id) {
-        EmployeeDto dto = employeeService.findByEmployeeId(id);
+        Employee res = employeeService.findByEmployeeId(id);
         return ResponseEntity.ok(CustomResponse.builder()
-                .data(dto)
+                .data(res)
+                .build());
+    }
+
+    @GetMapping("/get-by-email")
+    public ResponseEntity<?> getEmployeeByEmail(@RequestParam String email) {
+        Employee res = employeeService.findByEmail(email);
+        return ResponseEntity.ok(CustomResponse.builder()
+                .data(res)
                 .build());
     }
 

@@ -1,9 +1,11 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.hrm.model.abstractModel.AbstractAuditingEntity;
+import org.example.hrm.model.enumeration.RequestStatus;
 import org.example.hrm.model.enumeration.RequestType;
 
 import java.sql.Timestamp;
@@ -18,6 +20,7 @@ public class Request extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JsonIgnore
     private Employee employee;
     @Enumerated(jakarta.persistence.EnumType.STRING)
     private RequestType requestType;
@@ -25,5 +28,7 @@ public class Request extends AbstractAuditingEntity {
     private LocalTime startTime;
     private LocalTime endTime;
     private String note;
+    @Enumerated(jakarta.persistence.EnumType.STRING)
+    private RequestStatus status;
     private boolean approved;
 }

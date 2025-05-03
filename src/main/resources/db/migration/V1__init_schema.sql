@@ -27,7 +27,7 @@ CREATE TABLE candidate
     address            VARCHAR(255)          NULL,
     gender             VARCHAR(255)          NULL,
     date_of_birth      date                  NULL,
-    id_number          VARCHAR(255)          NULL,
+    id_number          VARCHAR(255)          NOT NULL,
     created_by         VARCHAR(50)           NOT NULL DEFAULT 'system',
     created_date       datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
@@ -79,7 +79,7 @@ CREATE TABLE employee
     address            VARCHAR(255)          NULL,
     gender             VARCHAR(255)          NULL,
     date_of_birth      date                  NULL,
-    id_number          VARCHAR(255)          NULL,
+    id_number          VARCHAR(255)          NOT NULL,
     created_by         VARCHAR(50)           NOT NULL DEFAULT 'system',
     created_date       datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
@@ -121,7 +121,7 @@ CREATE TABLE interview
     time               time                  NULL,
     location           VARCHAR(255)          NULL,
     notes              VARCHAR(255)          NULL,
-    employee_id        BIGINT                NULL,
+    interviewer_id     BIGINT                NULL,
     CONSTRAINT pk_interview PRIMARY KEY (id)
 );
 
@@ -135,6 +135,8 @@ CREATE TABLE job
     job_title          VARCHAR(255)          NULL,
     job_description    VARCHAR(255)          NULL,
     salary             DECIMAL(10,2)         NULL,
+    exp                INT                   NULL,
+    location           VARCHAR(100)          NOT NULL,
     position           VARCHAR(255)          NULL,
     requirements       VARCHAR(255)          NULL,
     posted_date        date                  NULL,
@@ -172,6 +174,7 @@ CREATE TABLE request
     start_time         time                  NULL,
     end_time           time                  NULL,
     note               VARCHAR(255)          NULL,
+    status             VARCHAR(100)          NOT NULL DEFAULT 'PENDING',
     approved           BIT(1)                NOT NULL,
     CONSTRAINT pk_request PRIMARY KEY (id)
 );
@@ -234,6 +237,12 @@ ALTER TABLE employee
 ALTER TABLE employee
     ADD CONSTRAINT uc_employee_id_number UNIQUE (id_number);
 
+ALTER TABLE candidate
+    ADD CONSTRAINT uc_candidate_id_number UNIQUE (id_number);
+
+ALTER TABLE job
+    ADD CONSTRAINT uc_job_title UNIQUE (job_title);
+
 ALTER TABLE attendance
     ADD CONSTRAINT FK_ATTENDANCE_ON_EMPLOYEE FOREIGN KEY (employee_id) REFERENCES employee (id);
 
@@ -253,7 +262,7 @@ ALTER TABLE employee_review
     ADD CONSTRAINT FK_EMPLOYEE_REVIEW_ON_REVIEWER FOREIGN KEY (reviewer_id) REFERENCES employee (id);
 
 ALTER TABLE interview
-    ADD CONSTRAINT FK_INTERVIEW_ON_EMPLOYEE FOREIGN KEY (employee_id) REFERENCES employee (id);
+    ADD CONSTRAINT FK_INTERVIEW_ON_EMPLOYEE FOREIGN KEY (interviewer_id) REFERENCES employee (id);
 
 ALTER TABLE job
     ADD CONSTRAINT FK_JOB_ON_DEPARTMENT FOREIGN KEY (department_id) REFERENCES department (id);

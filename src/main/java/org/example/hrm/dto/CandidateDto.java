@@ -4,13 +4,19 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @Builder
 public class CandidateDto {
+    private String fullName;
+    private String email;
+    private String phone;
+    private String address;
+    private String gender;
+    private LocalDate dateOfBirth;
+    private String idNumber;
     private String resume;
     private String cvLetter;
     private LocalDate appliedDate;
-    private Set<JobDto> jobs;
+    private Long jobId;
 }

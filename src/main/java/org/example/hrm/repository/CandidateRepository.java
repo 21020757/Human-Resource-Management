@@ -8,15 +8,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 @Repository
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     @Query(value = """
         SELECT * FROM candidate c
-        WHERE MATCH(full_name) AGAINST(:keyword IN BOOLEAN MODE)"""
-        , countQuery = """
-SELECT * FROM candidate c
-        WHERE MATCH(full_name) AGAINST(:keyword IN BOOLEAN MODE)
-""", nativeQuery = true
+        WHERE (:keyword IS NULL OR MATCH(full_name) AGAINST(:keyword IN BOOLEAN MODE))
+        """,
+            countQuery = """
+        SELECT COUNT(*) FROM candidate c
+        WHERE (:keyword IS NULL OR MATCH(full_name) AGAINST(:keyword IN BOOLEAN MODE))
+        """,
+            nativeQuery = true
     )
-    Page<Candidate> search(@Param("full_name") String keyword, Pageable pageable);
+    Page<Candidate> search(@Param("keyword") String keyword, Pageable pageable);
+
+
+    Candidate findByEmail(String email);
+
+    Set<Candidate> findAllByIdIn(Set<Long> ids);
 }

@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.hrm.service.impl.CustomUserDetailsService;
+import org.example.hrm.service.CustomUserDetailsService;
 import org.example.hrm.util.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if(refreshToken != null && jwtUtils.validateToken(refreshToken)) {
                     String newAccessToken = jwtUtils.generateAccessToken(jwtUtils.extractEmail(refreshToken));
                     jwtUtils.setTokenCookies(newAccessToken, refreshToken, response);
-                    authenticate(refreshToken, request);
+                    authenticate(newAccessToken, request);
                 }
             }
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,11 +25,15 @@ public class Job extends AbstractAuditingEntity {
     private String requirements;
     private LocalDate postedDate;
     private LocalDate closedDate;
+    private String location;
+    private int exp;
     private boolean active;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToMany(mappedBy = "jobs")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "jobs", fetch = FetchType.LAZY)
     private Set<Candidate> candidates;
 }

@@ -11,12 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/attendances")
+@RequestMapping("/api/time-keeping")
 public class AttendanceController {
     private final AttendanceService attendanceService;
     private final EmployeeService employeeService;
@@ -27,8 +27,8 @@ public class AttendanceController {
     }
 
     @PostMapping
-    public ResponseEntity<?> timeKeeping(Principal principal, @RequestBody AttendanceRequest attendanceRequest) {
-        String email = principal.getName();
+    public ResponseEntity<?> timeKeeping(Authentication authentication, @RequestBody AttendanceRequest attendanceRequest) {
+        String email = authentication.getName();
         AttendanceResponse response = attendanceService.recordAttendance(email, attendanceRequest);
         return ResponseEntity.ok(CustomResponse.builder()
                         .data(response)
@@ -37,15 +37,15 @@ public class AttendanceController {
 
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentUserAttendance(
-            Principal principal,
+            Authentication authentication,
             @RequestParam(defaultValue = "#{T(java.time.Year).now().value}") int year,
             @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().monthValue}") int month,
             @RequestParam(required = false) AttendanceStatus status,
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        String email = principal.getName();
-        EmployeeDto employeeDto = employeeService.findByEmail(email);
+        String email = authentication.getName();
+        Employee employee = employeeService.findByEmail(email);
         Page<AttendanceDto> page = attendanceService.findByFilters(
-                employeeDto.getId(), month, year, status, pageable);
+                employee.getId(), month, year, status, pageable);
         return ResponseEntity.ok(CustomResponse.builder()
                 .data(page.getContent())
                 .metadata(CommonUtils.buildMetadata(page, pageable))
