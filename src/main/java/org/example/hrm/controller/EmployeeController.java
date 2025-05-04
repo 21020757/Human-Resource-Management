@@ -55,7 +55,7 @@ public class EmployeeController {
                 .message("Cập nhật nhân viên thành công!")
                 .build());
     }
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> searchEmployee(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String position,
