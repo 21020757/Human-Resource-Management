@@ -6,7 +6,7 @@ public enum CoreErrorCode {
     OUT_OF_RANGE(HttpStatus.BAD_REQUEST,"Checkin/Checkout không thành công! Bạn đang ở ngoài khoảng cách cho phép!"),
     MISS_PARAM(HttpStatus.BAD_REQUEST, "Truyền lên thiếu tham số"),
     INVALID_EMAIL(HttpStatus.BAD_REQUEST,  "Email không hợp lệ"),
-
+    NOT_LOGIN(HttpStatus.BAD_REQUEST, "Xin hãy đăng nhập")
     ;
 
     private final HttpStatus status;

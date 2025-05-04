@@ -1,5 +1,6 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +22,11 @@ public class PerformanceReview extends AbstractAuditingEntity {
     @Column(precision = 10, scale = 2)
     private BigDecimal score;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "employee_id")
     private Employee employee;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "reviewer_id")
     private Employee reviewer;
     private String comment;

@@ -1,13 +1,16 @@
 package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.RequestDto;
+import org.example.hrm.dto.request.NotificationRequest;
 import org.example.hrm.exception.CoreException;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.Request;
+import org.example.hrm.model.enumeration.NotificationType;
 import org.example.hrm.model.enumeration.RequestStatus;
 import org.example.hrm.model.enumeration.RequestType;
 import org.example.hrm.repository.RequestRepository;
 import org.example.hrm.service.EmployeeService;
+import org.example.hrm.service.NotificationService;
 import org.example.hrm.service.RequestService;
 import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
@@ -19,16 +22,17 @@ import org.springframework.stereotype.Service;
 public class RequestServiceImpl implements RequestService {
     private final EmployeeService employeeService;
     private final RequestRepository requestRepository;
+    private final NotificationService notificationService;
 
     public RequestServiceImpl(EmployeeService employeeService,
-                              RequestRepository requestRepository) {
+                              RequestRepository requestRepository, NotificationService notificationService) {
         this.employeeService = employeeService;
         this.requestRepository = requestRepository;
+        this.notificationService = notificationService;
     }
     @Override
     public Request create(RequestDto dto, Authentication authentication) {
-        String email = authentication.getName();
-        Employee employee = employeeService.findByEmail(email);
+        Employee employee = CommonUtils.getCurrentUser(authentication);
         Request request = new Request();
         CommonUtils.copyPropertiesIgnoreNull(dto, request);
         request.setEmployee(employee);
@@ -47,9 +51,16 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void confirm(RequestDto dto) {
+    public void confirm(RequestDto dto, Authentication authentication) {
         Request request = requestRepository.findById(dto.getId()).orElseThrow();
         CommonUtils.copyPropertiesIgnoreNull(dto, request);
+        NotificationRequest notification = new NotificationRequest();
+        notification.setMessage(String.format("Yêu cầu của bạn đã được %s", dto.getStatus().toString().equals("REJECTED") ? "từ chối!": "chấp nhận"));
+        notification.setTitle("Yêu cầu của bạn đã được cập nhật!");
+        notification.setReceiverId(request.getEmployee().getId());
+        notification.setType(NotificationType.REMINDER);
+        notification.setPublic(false);
+        notificationService.sendNotification(notification);
         requestRepository.save(request);
     }
 

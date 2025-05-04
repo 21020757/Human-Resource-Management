@@ -34,7 +34,7 @@ public class RequestController {
     @PutMapping
     public ResponseEntity<?> confirm(@RequestBody RequestDto dto,
                                     Authentication authentication) {
-        requestService.confirm(dto);
+        requestService.confirm(dto, authentication);
         return ResponseEntity.ok(CustomResponse.builder()
                 .message("Confirmation")
                 .build());

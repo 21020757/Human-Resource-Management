@@ -18,6 +18,20 @@ CREATE TABLE attendance
     CONSTRAINT pk_attendance PRIMARY KEY (id)
 );
 
+CREATE TABLE notification
+(
+    id          BIGINT AUTO_INCREMENT NOT NULL,
+    title       VARCHAR(255)          NULL,
+    message     VARCHAR(255)          NULL,
+    is_read     BIT(1)               NOT NULL,
+    created_at  datetime              NULL,
+    receiver_id BIGINT                NULL,
+    sender_id   BIGINT                NULL,
+    is_public   BIT(1)                NOT NULL,
+    type        SMALLINT              NULL,
+    CONSTRAINT pk_notification PRIMARY KEY (id)
+);
+
 CREATE TABLE candidate
 (
     id                 BIGINT AUTO_INCREMENT NOT NULL,

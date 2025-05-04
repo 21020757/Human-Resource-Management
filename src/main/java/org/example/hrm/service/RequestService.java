@@ -12,6 +12,6 @@ public interface RequestService {
     Request create(RequestDto dto, Authentication authentication);
     Request getById(Long id);
     Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable);
-    void confirm(RequestDto dto);
+    void confirm(RequestDto dto, Authentication authentication);
     void delete(Long id);
 }
