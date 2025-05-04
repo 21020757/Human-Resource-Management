@@ -12,9 +12,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    @Query("SELECT r FROM Request r WHERE (:employeeId IS NULL OR r.employee.id = :employeeId)" +
+    @Query(value = "SELECT r FROM Request r WHERE (:employeeId IS NULL OR r.employee.id = :employeeId)" +
             "AND (:requestType IS NULL OR r.requestType = :requestType)" +
-            "AND (:requestStatus IS NULL OR r.status = :requestStatus)")
+            "AND (:requestStatus IS NULL OR r.status = :requestStatus)",
+    countQuery = "SELECT r FROM Request r WHERE (:employeeId IS NULL OR r.employee.id = :employeeId)" +
+            "AND (:requestType IS NULL OR r.requestType = :requestType)" +
+            "AND (:requestStatus IS NULL OR r.status = :requestStatus)",
+    nativeQuery = true)
     Page<Request> search(
             @Param("employeeId") Long employeeId,
             @Param("requestType") RequestType requestType,

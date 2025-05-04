@@ -3,6 +3,7 @@ package org.example.hrm.service.impl;
 import org.example.hrm.dto.ReportDto;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.Report;
+import org.example.hrm.model.enumeration.RequestType;
 import org.example.hrm.repository.ReportRepository;
 import org.example.hrm.service.EmployeeService;
 import org.example.hrm.service.ReportService;
@@ -32,12 +33,12 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Report getById(Long id) {
-        return null;
+        return reportRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Page<Report> search(String keyword, Long employeeId, Pageable pageable) {
-        return null;
+    public Page<Report> search(String keyword, RequestType requestType, Pageable pageable) {
+        return reportRepository.search(keyword, requestType, pageable);
     }
 
     @Override
