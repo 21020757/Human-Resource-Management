@@ -6,6 +6,7 @@ import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.exception.CoreErrorCode;
 import org.example.hrm.exception.CoreException;
 import org.example.hrm.model.Report;
+import org.example.hrm.model.enumeration.ReportType;
 import org.example.hrm.model.enumeration.RequestType;
 import org.example.hrm.service.ReportService;
 import org.example.hrm.util.CommonUtils;
@@ -46,9 +47,20 @@ public class ReportController {
     @GetMapping
     public ResponseEntity<?> search(
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) RequestType requestType,
+            @RequestParam(required = false) ReportType reportType,
             Pageable pageable) {
-        Page<Report> page = reportService.search(keyword, requestType, pageable);
+        Page<Report> page = reportService.search(keyword, reportType, pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
+    }
+
+    @GetMapping("/get-by-current")
+    public ResponseEntity<?> getByCurrent(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) ReportType reportType,
+            Pageable pageable,
+            Authentication authentication
+    ) {
+        Page<Report> page = reportService.search(keyword, reportType, pageable, authentication);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 }

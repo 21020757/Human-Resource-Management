@@ -7,7 +7,6 @@ import org.example.hrm.dto.AttendanceRequest;
 import org.example.hrm.dto.AttendanceResponse;
 import org.example.hrm.exception.CoreErrorCode;
 import org.example.hrm.exception.CoreException;
-import org.example.hrm.mapper.AttendanceMapper;
 import org.example.hrm.model.Attendance;
 import org.example.hrm.model.enumeration.AttendanceStatus;
 import org.example.hrm.repository.AttendanceRepository;
@@ -26,17 +25,14 @@ import java.time.LocalTime;
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
-    private final AttendanceMapper attendanceMapper;
     private static final double EARTH_RADIUS_KM = 6371.0;
     private static final double ACCEPTABLE_DISTANCE = WorkLocation.ACCEPTABLE_DISTANCE;
     private static final double officeLat = WorkLocation.latitude;
     private static final double officeLng = WorkLocation.longitude;
     private static final LocalTime CHECK_IN_DEADLINE = Constants.CHECK_IN_DEADLINE;
 
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository,
-                                 AttendanceMapper attendanceMapper) {
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
-        this.attendanceMapper = attendanceMapper;
     }
 
     @Override
@@ -66,19 +62,18 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Page<AttendanceDto> findByFilters(Long employeeId,
+    public Page<Attendance> findByFilters(Long employeeId,
                                              int month, int year,
                                              AttendanceStatus status,
                                              final Pageable pageable) {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = LocalDate.of(year, month, startDate.lengthOfMonth());
-        final Page<Attendance> attendances = attendanceRepository
+        return attendanceRepository
                 .findByFilters(employeeId,
                 startDate,
                 endDate,
                 status,
                 pageable);
-        return attendances.map(attendanceMapper::toDto);
     }
 
     public AttendanceResponse checkIn(Attendance attendance, AttendanceRequest checkin) {

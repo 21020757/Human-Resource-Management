@@ -34,6 +34,13 @@ public class ResponseFactory {
         );
     }
 
+    public static ResponseEntity<?> success() {
+        return ResponseEntity.ok(
+                CustomResponse.builder()
+                        .build()
+        );
+    }
+
     public static ResponseEntity<?> success(Object data, String message) {
         return ResponseEntity.ok(
                 CustomResponse.builder()

@@ -1,6 +1,8 @@
 package org.example.hrm.controller;
 
 import org.example.hrm.dto.*;
+import org.example.hrm.dto.response.ResponseFactory;
+import org.example.hrm.model.Attendance;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.enumeration.AttendanceStatus;
 import org.example.hrm.service.AttendanceService;
@@ -44,7 +46,7 @@ public class AttendanceController {
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable) {
         String email = authentication.getName();
         Employee employee = employeeService.findByEmail(email);
-        Page<AttendanceDto> page = attendanceService.findByFilters(
+        Page<Attendance> page = attendanceService.findByFilters(
                 employee.getId(), month, year, status, pageable);
         return ResponseEntity.ok(CustomResponse.builder()
                 .data(page.getContent())
@@ -60,17 +62,13 @@ public class AttendanceController {
             @RequestParam(required = false) AttendanceStatus status,
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<AttendanceDto> page = attendanceService.findByFilters(employeeId, month, year, status, pageable);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(page.getContent())
-                .metadata(CommonUtils.buildMetadata(page, pageable))
-                .message("Attendance records retrieved!").build());
+        Page<Attendance> page = attendanceService.findByFilters(employeeId, month, year, status, pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @PutMapping
     public ResponseEntity<?> updateAttendance(@RequestBody AttendanceDto attendanceDto) {
         attendanceService.updateAttendance(attendanceDto);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .message("Attendance updated successfully!").build());
+        return ResponseFactory.success("Cập nhật thành công!");
     }
 }

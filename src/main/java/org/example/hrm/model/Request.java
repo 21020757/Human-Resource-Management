@@ -32,4 +32,5 @@ public class Request extends AbstractAuditingEntity {
     @Enumerated(jakarta.persistence.EnumType.STRING)
     private RequestStatus status;
     private boolean approved;
+    private boolean deleted;
 }

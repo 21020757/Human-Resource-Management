@@ -2,7 +2,6 @@ package org.example.hrm.service.impl;
 
 import org.example.hrm.constant.Constants;
 import org.example.hrm.dto.SalaryDto;
-import org.example.hrm.mapper.SalaryMapper;
 import org.example.hrm.model.Attendance;
 import org.example.hrm.model.Contract;
 import org.example.hrm.model.Employee;
@@ -27,19 +26,16 @@ public class PayrollServiceImpl implements PayrollService {
     private final AttendanceRepository attendanceRepository;
     private final SalaryRepository salaryRepository;
     private final ContractRepository contractRepository;
-    private final SalaryMapper salaryMapper;
 
     public PayrollServiceImpl(EmployeeRepository employeeRepository,
                               AttendanceRepository attendanceRepository,
                               SalaryRepository salaryRepository,
-                              ContractRepository contractRepository,
-                              SalaryMapper salaryMapper) {
+                              ContractRepository contractRepository) {
         this.employeeRepository = employeeRepository;
         this.attendanceRepository = attendanceRepository;
         this.salaryRepository = salaryRepository;
         this.contractRepository = contractRepository;
-        this.salaryMapper = salaryMapper;
-    }
+     }
 
     @Override
     public void initMonthlySalary() {
@@ -82,13 +78,12 @@ public class PayrollServiceImpl implements PayrollService {
     }
 
     @Override
-    public Page<SalaryDto> getSalary(final Pageable pageable) {
-        final Page<Salary> page = salaryRepository.findAll(pageable);
-        return page.map(salaryMapper::toDto);
+    public Page<Salary> getSalary(final Pageable pageable) {
+        return salaryRepository.findAll(pageable);
     }
 
     @Override
-    public Page<SalaryDto> getSalaryByEmployeeId(Pageable pageable, Long employeeId) {
+    public Page<Salary> getSalaryByEmployeeId(Pageable pageable, Long employeeId) {
         return null;
     }
 

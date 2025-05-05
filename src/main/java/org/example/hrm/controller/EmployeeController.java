@@ -3,6 +3,7 @@ package org.example.hrm.controller;
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.EmployeeDto;
 import org.example.hrm.dto.Metadata;
+import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Employee;
 import org.example.hrm.service.EmployeeService;
 import org.example.hrm.util.CommonUtils;
@@ -33,51 +34,39 @@ public class EmployeeController {
     @GetMapping("/get-by-email")
     public ResponseEntity<?> getEmployeeByEmail(@RequestParam String email) {
         Employee res = employeeService.findByEmail(email);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(res)
-                .build());
+        return ResponseFactory.success(res);
     }
 
     @PostMapping
     public ResponseEntity<?> createEmployee(@RequestBody EmployeeDto dto) {
-        EmployeeDto savedEmployee = employeeService.create(dto);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .message("Tạo nhân viên thành công!")
-                .data(savedEmployee)
-                .build());
+        Employee savedEmployee = employeeService.create(dto);
+        return ResponseFactory.success(savedEmployee, "Tạo nhân viên thành công!");
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEmployee(
             @PathVariable Long id,
             @RequestBody EmployeeDto dto) {
         employeeService.update(id, dto);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .message("Cập nhật nhân viên thành công!")
-                .build());
+        return ResponseFactory.success("Cập nhật nhân viên thành công!");
     }
     @GetMapping("/search")
     public ResponseEntity<?> searchEmployee(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String position,
-            @RequestParam(required = false) Long departmentId,
+            @RequestParam(name = "departmentId", required = false) Long departmentId,
             @RequestParam(required = false) Boolean active,
             @PageableDefault(sort = {"fullName"},
                     direction = Sort.Direction.ASC) Pageable pageable) {
-        final Page<EmployeeDto> page = employeeService.search(keyword,
+        final Page<Employee> page = employeeService.search(keyword,
                 position,
                 departmentId,
                 active,
                 pageable);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(page.getContent())
-                .metadata(CommonUtils.buildMetadata(page, pageable))
-                .build());
+        return ResponseFactory.paginationSuccess(page, pageable);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .message("Employee deleted successful!")
-                .build());
+        return ResponseFactory.success("Xóa nhân viên thành công!");
     }
 }

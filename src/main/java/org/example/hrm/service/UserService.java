@@ -3,13 +3,15 @@ package org.example.hrm.service;
 import org.example.hrm.dto.ChangePasswordRequest;
 import org.example.hrm.dto.SignupRequest;
 import org.example.hrm.dto.UserDto;
+import org.example.hrm.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface UserService {
-    UserDto getById(long id);
-    List<UserDto> getAll();
-    UserDto create(SignupRequest signupRequest);
+    User getById(long id);
+    Page<User> search(String keyword, Pageable pageable);
+    User create(SignupRequest signupRequest);
     void autoCreate(UserDto userDto);
     Boolean existsByEmail(String email);
     void changePassword(String email, ChangePasswordRequest request);

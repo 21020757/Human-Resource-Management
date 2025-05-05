@@ -7,5 +7,6 @@ import java.util.Set;
 
 public interface RoleService {
     Role findByRoleName(RoleName roleName);
+    Set<Role> findAllByIds(Set<Long> ids);
     Set<Role> mapToEntity(Set<RoleDto> roles);
 }

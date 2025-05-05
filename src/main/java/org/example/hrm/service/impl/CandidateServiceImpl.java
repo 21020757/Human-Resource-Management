@@ -2,6 +2,7 @@ package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.CandidateDto;
 import org.example.hrm.model.Candidate;
+import org.example.hrm.model.Interview;
 import org.example.hrm.model.Job;
 import org.example.hrm.repository.CandidateRepository;
 import org.example.hrm.service.Base64Service;
@@ -78,5 +79,11 @@ public class CandidateServiceImpl implements CandidateService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Set<Interview> getInterviews(Long candidateId) {
+        Candidate candidate = candidateRepository.findById(candidateId).orElseThrow();
+        return candidate.getInterviews();
     }
 }

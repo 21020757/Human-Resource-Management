@@ -2,6 +2,7 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.ReviewDto;
 import org.example.hrm.dto.response.ResponseFactory;
+import org.example.hrm.dto.response.ReviewResponse;
 import org.example.hrm.model.PerformanceReview;
 import org.example.hrm.service.PerformanceReviewService;
 import org.example.hrm.util.CommonUtils;
@@ -27,18 +28,18 @@ public class PerformanceReviewController {
         return ResponseFactory.success(performanceReview);
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam(required = false) Long employeeId,
                                     Authentication authentication,
                                     Pageable pageable) {
         CommonUtils.validateAuthentication(authentication);
-        Page<PerformanceReview> page = performanceReviewService.search(employeeId, pageable, authentication);
+        Page<ReviewResponse> page = performanceReviewService.search(employeeId, pageable, authentication);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> search(Pageable pageable) {
-        Page<PerformanceReview> page = performanceReviewService.getAll(pageable);
+        Page<ReviewResponse> page = performanceReviewService.getAll(pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 

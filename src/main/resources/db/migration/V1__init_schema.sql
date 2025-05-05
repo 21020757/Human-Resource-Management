@@ -190,7 +190,8 @@ CREATE TABLE request
     note               VARCHAR(255)          NULL,
     comment            VARCHAR(255)          NULL,
     status             VARCHAR(100)          NULL DEFAULT 'PENDING',
-    approved           BIT(1)                NULL,
+    approved           BIT(1)                NULL default b'0',
+    deleted            BIT(1)                NULL default b'0',
     CONSTRAINT pk_request PRIMARY KEY (id)
 );
 

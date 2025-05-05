@@ -1,10 +1,10 @@
 package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.DepartmentDto;
-import org.example.hrm.mapper.DepartmentMapper;
 import org.example.hrm.model.Department;
 import org.example.hrm.repository.DepartmentRepository;
 import org.example.hrm.service.DepartmentService;
+import org.example.hrm.util.CommonUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +12,9 @@ import java.util.List;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
-    private final DepartmentMapper departmentMapper;
 
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository,
-                                 DepartmentMapper departmentMapper) {
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
-        this.departmentMapper = departmentMapper;
     }
 
     @Override
@@ -27,23 +24,27 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public DepartmentDto getDepartmentByName(String departmentName) {
-        return departmentMapper.toDto(departmentRepository.getByDepartmentName(departmentName));
+    public Department getDepartmentByName(String departmentName) {
+        return departmentRepository.getByDepartmentName(departmentName);
     }
 
     @Override
-    public List<DepartmentDto> getAllDepartment() {
-        return departmentMapper.toDto(departmentRepository.findAll());
+    public List<Department> getAllDepartment() {
+        return departmentRepository.findAll();
     }
 
     @Override
-    public DepartmentDto createDepartment(DepartmentDto departmentDto) {
-        return departmentMapper.toDto(departmentRepository.save(departmentMapper.toEntity(departmentDto)));
+    public Department createDepartment(DepartmentDto departmentDto) {
+        Department department = new Department();
+        CommonUtils.copyPropertiesIgnoreNull(departmentDto, department);
+        return departmentRepository.save(department);
     }
 
     @Override
     public void updateDepartment(DepartmentDto departmentDto) {
-        departmentRepository.save(departmentMapper.toEntity(departmentDto));
+        Department department = getDepartment(departmentDto.getId());
+        CommonUtils.copyPropertiesIgnoreNull(departmentDto, department);
+        departmentRepository.save(department);
     }
 
     @Override
