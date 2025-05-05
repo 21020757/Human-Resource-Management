@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -29,6 +31,7 @@ public class JobServiceImpl implements JobService {
         Department department = departmentService.getDepartment(dto.getDepartmentId());
 
         BeanUtils.copyProperties(dto, job);
+        job.setPostedDate(LocalDate.now());
         job.setActive(true);
         job.setDepartment(department);
         return jobRepository.save(job);

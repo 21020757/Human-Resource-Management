@@ -4,6 +4,7 @@ import org.example.hrm.dto.ChangePasswordRequest;
 import org.example.hrm.dto.RoleDto;
 import org.example.hrm.dto.SignupRequest;
 import org.example.hrm.dto.UserDto;
+import org.example.hrm.dto.request.UpdateUserRequest;
 import org.example.hrm.exception.ChangePasswordException;
 import org.example.hrm.model.Role;
 import org.example.hrm.model.User;
@@ -105,12 +106,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
+    public void update(String email, UpdateUserRequest request) {
+        User user = userRepository.findByEmail(email).orElse(null);
         if(user == null) {
-            throw new UsernameNotFoundException(userDto.getEmail() + " not found!");
+            throw new UsernameNotFoundException(request.getEmail() + " not found!");
         }
-        CommonUtils.copyPropertiesIgnoreNull(userDto, user);
+        CommonUtils.copyPropertiesIgnoreNull(request, user);
+        System.out.println(request.getRoleIds() + "vail");
+        Set<Role> roles = roleService.findAllByIds(request.getRoleIds());
+        System.out.println(roles + "hehe");
+        user.setRoles(roles);
         userRepository.save(user);
     }
 

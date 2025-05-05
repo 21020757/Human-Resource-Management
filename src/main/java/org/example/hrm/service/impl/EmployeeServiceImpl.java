@@ -3,6 +3,7 @@ package org.example.hrm.service.impl;
 import jakarta.transaction.Transactional;
 import org.example.hrm.dto.EmployeeDto;
 import org.example.hrm.dto.UserDto;
+import org.example.hrm.dto.request.UpdateUserRequest;
 import org.example.hrm.exception.EmployeeNotFoundException;
 import org.example.hrm.model.Department;
 import org.example.hrm.model.Employee;
@@ -72,10 +73,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void update(Long id, EmployeeDto employeeDto) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
         if(employeeDto.isActive() != employee.isActive()) {
-            UserDto userDto = new UserDto();
-            userDto.setEmail(employee.getEmail());
-            userDto.setActive(employeeDto.isActive());
-            userService.update(userDto);
+            UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+            updateUserRequest.setActive(employeeDto.isActive());
+            userService.update(employee.getEmail(), updateUserRequest);
         }
         CommonUtils.copyPropertiesIgnoreNull(employeeDto, employee);
         employeeRepository.save(employee);
