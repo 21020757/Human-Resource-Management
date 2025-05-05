@@ -12,18 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class HrmApplication {
-	@Autowired
-	private AttendanceScheduler attendanceScheduler;
-	@Autowired
-	private PayrollScheduler payrollScheduler;
 
 	public static void main(String[] args) {
 		SpringApplication.run(HrmApplication.class, args);
-	}
-
-	@PostConstruct
-	public void init() {
-		attendanceScheduler.initDailyAttendance();
-		payrollScheduler.initMonthlySalary();
 	}
 }
