@@ -61,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findById(employeeId)
                 .orElseThrow(()
                         -> new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.")
-        );
+                );
     }
 
     @Override
@@ -91,12 +91,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Page<Employee> search (String keyword,
-                                     String position,
-                                     Long departmentId,
-                                     Boolean active,
-                                     Pageable pageable) {
+                                  String position,
+                                  Long departmentId,
+                                  Boolean active,
+                                  Pageable pageable) {
         Page<Employee> page;
-        if (isNoFilter(keyword, position, departmentId)) {
+        if (isNoFilter(keyword, position, departmentId, active)) {
             page = employeeRepository.findAll(pageable);
         } else {
             pageable = PageRequest.of(pageable.getPageNumber(),
@@ -106,9 +106,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         return page;
     }
 
-    private boolean isNoFilter(String keyword, String position, Long departmentId) {
+    private boolean isNoFilter(String keyword, String position, Long departmentId, Boolean active) {
         return (keyword == null || keyword.isBlank()) &&
                 (position == null || position.isBlank()) &&
-                departmentId == null;
+                departmentId == null && active == null;
     }
 }
