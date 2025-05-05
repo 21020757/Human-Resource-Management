@@ -23,6 +23,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Set<Role> findAllByIds(Set<Long> ids) {
+        return roleRepository.findAllByIdIn(ids);
+    }
+
+    @Override
     public Set<Role> mapToEntity(Set<RoleDto> roles) {
         return roles.stream().map(
                 (role) -> roleRepository.findByName(role.getRoleName())

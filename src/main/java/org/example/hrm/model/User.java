@@ -1,5 +1,6 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class User extends AbstractAuditingEntity {
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     private Set<Role> roles;

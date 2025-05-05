@@ -3,6 +3,7 @@ package org.example.hrm.service.impl;
 import org.example.hrm.dto.ReportDto;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.Report;
+import org.example.hrm.model.enumeration.ReportType;
 import org.example.hrm.model.enumeration.RequestType;
 import org.example.hrm.repository.ReportRepository;
 import org.example.hrm.service.EmployeeService;
@@ -37,8 +38,14 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Page<Report> search(String keyword, RequestType requestType, Pageable pageable) {
-        return reportRepository.search(keyword, requestType, pageable);
+    public Page<Report> search(String keyword, ReportType reportType, Pageable pageable) {
+        return reportRepository.search(keyword, reportType, pageable);
+    }
+
+    @Override
+    public Page<Report> search(String keyword, ReportType reportType, Pageable pageable, Authentication authentication) {
+         Long employeeId = CommonUtils.getCurrentUser(authentication).getId();
+         return reportRepository.searchByEmployeeId(employeeId, keyword, reportType, pageable);
     }
 
     @Override

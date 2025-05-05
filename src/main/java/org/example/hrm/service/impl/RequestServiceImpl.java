@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class RequestServiceImpl implements RequestService {
     private final EmployeeService employeeService;
@@ -33,7 +35,16 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request create(RequestDto dto, Authentication authentication) {
         Employee employee = CommonUtils.getCurrentUser(authentication);
-        Request request = new Request();
+        Request request = requestRepository.findByEmployeeIdAndRequestedDateAndRequestTypeAndDeletedIsFalse(
+                employee.getId(),
+                dto.getRequestedDate(),
+                dto.getRequestType());
+        if (request != null) {
+            request.setDeleted(true);
+            request = new Request();
+        } else {
+            request = new Request();
+        }
         CommonUtils.copyPropertiesIgnoreNull(dto, request);
         request.setEmployee(employee);
         request.setStatus(RequestStatus.PENDING);
@@ -46,8 +57,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable) {
-        return requestRepository.search(employeeId, requestType, requestStatus, pageable);
+    public Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable, LocalDate fromDate, LocalDate toDate) {
+        return requestRepository.search(employeeId, requestType, requestStatus, fromDate, toDate, pageable);
     }
 
     @Override
@@ -66,6 +77,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void delete(Long id) {
-
+        Request request = requestRepository.findById(id).orElseThrow();
+        request.setDeleted(true);
+        requestRepository.save(request);
     }
 }

@@ -3,7 +3,11 @@ package org.example.hrm.controller;
 import org.example.hrm.dto.ChangePasswordRequest;
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.UserDto;
+import org.example.hrm.dto.response.ResponseFactory;
+import org.example.hrm.model.User;
 import org.example.hrm.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -23,33 +27,26 @@ public class UserController {
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request,
                                                          Authentication authentication) {
         userService.changePassword(authentication.getName(), request);
-        return ResponseEntity.ok(
-                CustomResponse.builder().message("Password changed successful!").build());
+        return ResponseFactory.success("Đổi mật khẩu thành công!");
     }
 
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
         userService.update(userDto);
-        return ResponseEntity.ok(
-                CustomResponse.builder().message("Update successful!").build());
+        return ResponseFactory.success("Cập nhật mật khẩu thành công!");
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAll() {
-        List<UserDto> users = userService.getAll();
-        return ResponseEntity.ok(
-                CustomResponse.builder()
-                        .data(users)
-                        .build());
+    @GetMapping("/search")
+    public ResponseEntity<?> getAll(
+            @RequestParam String keyword,
+            Pageable pageable) {
+        Page<User> page = userService.search(keyword, pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @GetMapping("/{id:\\d+}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-        UserDto userDto = userService.getById(id);
-        return ResponseEntity.ok(
-                CustomResponse.builder()
-                        .data(userDto)
-                        .build()
-        );
+        User user = userService.getById(id);
+        return ResponseFactory.success(user);
     }
 }

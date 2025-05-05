@@ -2,10 +2,15 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.InterviewDto;
+import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Interview;
 import org.example.hrm.service.InterviewService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/interviews")
@@ -19,16 +24,28 @@ public class InterviewController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody InterviewDto interviewDto) {
         Interview res = interviewService.create(interviewDto);
-        return ResponseEntity.ok(
-                CustomResponse.builder()
-                        .data(res)
-                        .build()
-        );
+        return ResponseFactory.success(res);
     }
 
     @PutMapping
     public ResponseEntity<?> update(@RequestBody InterviewDto interviewDto) {
         interviewService.update(interviewDto);
-        return ResponseEntity.ok().build();
+        return ResponseFactory.success("Cập nhật thành công!");
+    }
+
+    @GetMapping
+    public ResponseEntity<?> findAll(
+            @RequestParam(required = false) Long interviewerId,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            Pageable pageable) {
+        Page<Interview> page = interviewService.search(interviewerId, startDate, endDate, pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
+    }
+
+    @GetMapping("/{id:\\d+}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Interview interview = interviewService.getById(id);
+        return ResponseFactory.success(interview);
     }
 }

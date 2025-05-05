@@ -2,7 +2,9 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CandidateDto;
 import org.example.hrm.dto.CustomResponse;
+import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Candidate;
+import org.example.hrm.model.Interview;
 import org.example.hrm.service.CandidateService;
 import org.example.hrm.util.CommonUtils;
 import org.springframework.core.io.Resource;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/candidates")
@@ -25,18 +29,20 @@ public class CandidateController {
     @PostMapping
     public ResponseEntity<?> save(@ModelAttribute CandidateDto candidateDto) {
         Candidate candidate = candidateService.create(candidateDto);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(candidate)
-                .build());
+        return ResponseFactory.success(candidate);
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam(required = false) String keyword, Pageable pageable) {
         Page<Candidate> page = candidateService.search(keyword, pageable);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(page.getContent())
-                .metadata(CommonUtils.buildMetadata(page, pageable))
-                .build());
+        return ResponseFactory.paginationSuccess(page, pageable);
+    }
+
+    @GetMapping("/{id:\\d+}/interviews")
+    public ResponseEntity<?> getInterviews(
+            @PathVariable Long id) {
+        Set<Interview> interviews = candidateService.getInterviews(id);
+        return ResponseFactory.success(interviews);
     }
 
     @GetMapping("/{id:\\d+}/resume")

@@ -2,6 +2,7 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.DepartmentDto;
+import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Department;
 import org.example.hrm.service.DepartmentService;
 import org.springframework.http.ResponseEntity;
@@ -22,39 +23,31 @@ public class DepartmentController {
 
     @PostMapping
     public ResponseEntity<?> createDepartment(@RequestBody DepartmentDto dto) {
-        DepartmentDto departmentDto = departmentService.createDepartment(dto);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(departmentDto)
-                .build());
+        Department department = departmentService.createDepartment(dto);
+        return ResponseFactory.success(department);
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateDepartment(@RequestBody DepartmentDto dto) {
         departmentService.updateDepartment(dto);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .build());
+        return ResponseFactory.success("Cập nhật thành công!");
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllDepartments() {
-        List<DepartmentDto> list = departmentService.getAllDepartment();
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(list)
-                .build());
+        List<Department> list = departmentService.getAllDepartment();
+        return ResponseFactory.success(list);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getDepartmentById(@PathVariable long id) {
         Department department = departmentService.getDepartment(id);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .data(department)
-                .build());
+        return ResponseFactory.success(department);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDepartment(@PathVariable long id) {
         departmentService.deleteDepartment(id);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .build());
+        return ResponseFactory.success("Xóa thành công!");
     }
 }

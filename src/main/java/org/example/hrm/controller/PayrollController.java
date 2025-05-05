@@ -2,6 +2,8 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.SalaryDto;
+import org.example.hrm.dto.response.ResponseFactory;
+import org.example.hrm.model.Salary;
 import org.example.hrm.service.PayrollService;
 import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
@@ -24,11 +26,7 @@ public class PayrollController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllSalary(Pageable pageable)
     {
-        final Page<SalaryDto> page = payrollService.getSalary(pageable);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .message("Employee list retrieved!")
-                .data(page.getContent())
-                .metadata(CommonUtils.buildMetadata(page, pageable))
-                .build());
+        final Page<Salary> page = payrollService.getSalary(pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
     }
 }

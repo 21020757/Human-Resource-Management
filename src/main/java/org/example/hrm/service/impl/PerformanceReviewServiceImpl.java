@@ -1,6 +1,7 @@
 package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.ReviewDto;
+import org.example.hrm.dto.response.ReviewResponse;
 import org.example.hrm.model.Employee;
 import org.example.hrm.model.PerformanceReview;
 import org.example.hrm.repository.PerformanceReviewRepository;
@@ -44,13 +45,15 @@ public class PerformanceReviewServiceImpl implements PerformanceReviewService {
     }
 
     @Override
-    public Page<PerformanceReview> search(Long employeeId, Pageable pageable, Authentication authentication) {
-        return repository.search(employeeId, CommonUtils.getCurrentUser(authentication).getId(), pageable);
+    public Page<ReviewResponse> search(Long employeeId, Pageable pageable, Authentication authentication) {
+        Page<PerformanceReview> page = repository.search(employeeId, CommonUtils.getCurrentUser(authentication).getId(), pageable);
+        return page.map(ReviewResponse::new);
     }
 
     @Override
-    public Page<PerformanceReview> getAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<ReviewResponse> getAll(Pageable pageable) {
+        Page<PerformanceReview> page = repository.findAll(pageable);
+        return page.map(ReviewResponse::new);
     }
 
     @Override

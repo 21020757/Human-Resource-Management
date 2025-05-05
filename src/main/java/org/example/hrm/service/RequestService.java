@@ -8,10 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
+import java.time.LocalDate;
+
 public interface RequestService {
     Request create(RequestDto dto, Authentication authentication);
     Request getById(Long id);
-    Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable);
+    Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable, LocalDate fromDate, LocalDate toDate);
     void confirm(RequestDto dto, Authentication authentication);
     void delete(Long id);
 }

@@ -20,4 +20,5 @@ public class RequestDto {
     private String comment;
     private RequestStatus status;
     private boolean approved;
+    private boolean deleted;
 }

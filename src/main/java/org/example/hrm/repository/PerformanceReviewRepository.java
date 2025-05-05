@@ -13,8 +13,7 @@ public interface PerformanceReviewRepository extends JpaRepository<PerformanceRe
     @Query(value = "SELECT r FROM PerformanceReview r WHERE (:employeeId IS NULL OR r.employee.id = :employeeId) " +
             "AND (:reviewerId IS NULL OR r.reviewer.id = :reviewerId)",
     countQuery = "SELECT r FROM PerformanceReview r WHERE (:employeeId IS NULL OR r.employee.id = :employeeId) " +
-            "AND (:reviewerId IS NULL OR r.reviewer.id = :reviewerId)",
-    nativeQuery = true)
+            "AND (:reviewerId IS NULL OR r.reviewer.id = :reviewerId)")
     Page<PerformanceReview> search(
             @Param("employeeId") Long employeeId,
             @Param("reviewerId") Long reviewerId,

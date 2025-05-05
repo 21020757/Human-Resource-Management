@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 
 
 public interface EmployeeService {
-    EmployeeDto create(EmployeeDto employeeDto);
+    Employee create(EmployeeDto employeeDto);
     Employee findByEmployeeId(long employeeId);
     Employee findByEmail(String email);
     void update(Long id, EmployeeDto employeeDto);
     void delete(Long employeeId);
-    Page<EmployeeDto> search(String keyword,
+    Page<Employee> search(String keyword,
                              String position,
                              Long departmentId,
                              Boolean active,

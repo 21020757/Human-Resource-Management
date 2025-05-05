@@ -2,6 +2,7 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.JobDto;
+import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Job;
 import org.example.hrm.service.JobService;
 import org.example.hrm.util.CommonUtils;
@@ -23,13 +24,10 @@ public class JobController {
     @PostMapping
     public ResponseEntity<?> create(@RequestBody JobDto req) {
         Job job = jobService.create(req);
-        return ResponseEntity.ok(CustomResponse.builder()
-                        .data(job)
-                        .message("Tạo job thành công!")
-                .build());
+        return ResponseFactory.success(job, "Tạo việc làm thành công!");
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<?> getAllJobs(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Boolean active,
@@ -37,33 +35,18 @@ public class JobController {
             Pageable pageable
     ) {
         Page<Job> page = jobService.search(keyword, active, location, pageable);
-        return ResponseEntity.ok(
-                CustomResponse.builder()
-                        .data(page.getContent())
-                        .message("Tìm kiếm việc thành công!")
-                        .metadata(CommonUtils.buildMetadata(page, pageable))
-                        .build()
-        );
+        return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @GetMapping("/{id:\\d+}")
     public ResponseEntity<?> getJobById(@PathVariable Long id) {
         Job job = jobService.getJobById(id);
-        return ResponseEntity.ok(
-                CustomResponse.builder()
-                        .data(job)
-                        .message("Job with id " + id + " found!")
-                        .build()
-        );
+        return ResponseFactory.success(job);
     }
 
     @PutMapping("/deactivate/{id:\\d+}")
     public ResponseEntity<?> deactivate(@PathVariable Long id) {
         jobService.deactivate(id);
-        return ResponseEntity.ok(
-                CustomResponse.builder()
-                        .message("Xóa job thành công!")
-                        .build()
-        );
+        return ResponseFactory.success("Xóa nhân viên thành công!");
     }
 }

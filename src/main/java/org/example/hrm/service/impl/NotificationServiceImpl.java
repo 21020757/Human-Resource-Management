@@ -1,11 +1,13 @@
 package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.request.NotificationRequest;
+import org.example.hrm.model.Employee;
 import org.example.hrm.model.Notification;
 import org.example.hrm.model.enumeration.NotificationType;
 import org.example.hrm.repository.NotificationRepository;
 import org.example.hrm.service.NotificationService;
 import org.example.hrm.util.CommonUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,8 +36,9 @@ public class NotificationServiceImpl implements NotificationService {
     /**
      * Lấy danh sách thông báo của người dùng bao gồm cả thông báo công khai
      */
-    public List<Notification> getNotificationsForUser(Long userId) {
-        return notificationRepository.findByReceiverIdOrIsPublicTrue(userId);
+    public List<Notification> getNotificationsForUser(Authentication authentication) {
+        Employee employee = CommonUtils.getCurrentUser(authentication);
+        return notificationRepository.findByReceiverIdOrIsPublicTrue(employee.getId());
     }
 
     /**

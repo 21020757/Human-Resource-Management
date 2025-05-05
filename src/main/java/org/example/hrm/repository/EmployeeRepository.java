@@ -17,17 +17,17 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findAllByActive(boolean active);
     @Query(value = """
     SELECT * FROM employee 
-    WHERE MATCH(full_name, position) AGAINST(:keyword IN BOOLEAN MODE)
-    AND department_id = COALESCE(:departmentId, department_id)
-    AND position = COALESCE(:position, position)
-    AND active = COALESCE(:active, active)
+    WHERE (:keyword IS NULL OR MATCH(full_name, position) AGAINST(:keyword IN BOOLEAN MODE))
+    AND (:departmentId IS NULL OR department_id = :departmentId)
+    AND (:position IS NULL OR position = :position)
+    AND (:active IS NULL OR active = :active)
     """,
             countQuery = """
     SELECT COUNT(*) FROM employee 
-    WHERE MATCH(full_name, position) AGAINST(:keyword IN BOOLEAN MODE)
-    AND department_id = COALESCE(:departmentId, department_id)
-    AND position = COALESCE(:position, position)
-    AND active = COALESCE(:active, active)
+    WHERE (:keyword IS NULL OR MATCH(full_name, position) AGAINST(:keyword IN BOOLEAN MODE))
+    AND (:departmentId IS NULL OR department_id = :departmentId)
+    AND (:position IS NULL OR position = :position)
+    AND (:active IS NULL OR active = :active)
     """,
             nativeQuery = true)
     Page<Employee> search(@Param("keyword") String keyword,
@@ -35,4 +35,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                           @Param("departmentId") Long departmentId,
                           @Param("active") Boolean active,
                           Pageable pageable);
+
+
+    int countByDepartmentId(Long departmentId);
 }

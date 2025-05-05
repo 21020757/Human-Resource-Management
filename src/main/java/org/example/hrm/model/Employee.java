@@ -1,5 +1,6 @@
 package org.example.hrm.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class Employee extends UserProfile {
     @JoinColumn(name = "department_id")
     private Department department;
     @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Attendance> attendances;
     private boolean active;
 }
