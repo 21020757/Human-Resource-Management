@@ -6,13 +6,11 @@ import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.LoginRequest;
 import org.example.hrm.dto.LoginRes;
 import org.example.hrm.dto.SignupRequest;
+import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.User;
 import org.example.hrm.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,6 +20,11 @@ public class AuthController {
 
     public AuthController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<?> health() {
+        return ResponseFactory.success("Health check ok");
     }
 
     @PostMapping("/login")
