@@ -7,6 +7,7 @@ import org.example.hrm.repository.RoleRepository;
 import org.example.hrm.service.RoleService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,16 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public Set<Role> getAll() {
+        return new HashSet<>(roleRepository.findAll());
+    }
+
+    @Override
+    public Role findById(Long id) {
+        return roleRepository.findById(id).orElse(null);
     }
 
     @Override

@@ -27,5 +27,5 @@ public class User extends AbstractAuditingEntity {
     private String password;
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     private Set<Role> roles;
-    private boolean active;
+    private boolean active = true;
 }

@@ -3,6 +3,7 @@ package org.example.hrm.controller;
 import org.example.hrm.dto.ChangePasswordRequest;
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.UserDto;
+import org.example.hrm.dto.request.UpdateUserRequest;
 import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.User;
 import org.example.hrm.service.UserService;
@@ -30,10 +31,12 @@ public class UserController {
         return ResponseFactory.success("Đổi mật khẩu thành công!");
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
-        userService.update(userDto);
-        return ResponseFactory.success("Cập nhật mật khẩu thành công!");
+    @PutMapping("/update/user-email={email}")
+    public ResponseEntity<?> updateUser(
+            @PathVariable String email,
+            @RequestBody UpdateUserRequest request) {
+        userService.update(email, request);
+        return ResponseFactory.success("Cập nhật thông tin thành công!");
     }
 
     @GetMapping("/search")

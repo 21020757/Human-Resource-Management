@@ -9,7 +9,7 @@ public class CustomPermissionEvaluator {
     public boolean isHR(Authentication authentication) {
         if (authentication.getPrincipal() instanceof CustomUserDetails) {
             String position = ((CustomUserDetails) authentication.getPrincipal()).getPosition();
-            return "HR".equalsIgnoreCase(position);
+            return position != null && position.toLowerCase().contains("hr");
         }
         return false;
     }
