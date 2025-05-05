@@ -99,8 +99,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (isNoFilter(keyword, position, departmentId, active)) {
             page = employeeRepository.findAll(pageable);
         } else {
-            pageable = PageRequest.of(pageable.getPageNumber(),
-                    pageable.getPageSize(), Sort.Direction.ASC, "full_name");
             page = employeeRepository.search(keyword, position, departmentId, active, pageable);
         }
         return page;
