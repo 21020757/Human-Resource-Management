@@ -4,11 +4,12 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: Soi07052003@
       MYSQL_DATABASE: hrm
     ports:
-      - "3307:3306"
+      - "3307:3306"  # Map cổng 3306 của container ra 3307 trên host
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -28,6 +29,8 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/hrm?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_FLYWAY_URL: jdbc:mysql://mysql:3306/hrm?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Soi07052003@
 
 volumes:
   mysql_data:

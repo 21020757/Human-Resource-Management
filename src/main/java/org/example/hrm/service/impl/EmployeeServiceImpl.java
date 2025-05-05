@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(department);
         employee.setHireDate(LocalDate.now());
         employee.setActive(true);
-        eventPublisher.publishEvent(employeeDto);
+        eventPublisher.publishEvent(new EmployeeCreatedEvent(employeeDto));
         int count = employeeRepository.countByDepartmentId(employeeDto.getDepartmentId());
         String code = department.getDepartmentCode() + (count + 1); // đếm trước khi lưu
         employee.setEmployeeCode(code);
