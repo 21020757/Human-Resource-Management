@@ -16,7 +16,7 @@ public class Candidate extends UserProfile {
     @JsonIgnore
     private String resume;
     private String cvLetter;
-    private LocalDate appliedDate;
+    private LocalDate appliedDate = LocalDate.now();
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(name = "candidate_interview",
