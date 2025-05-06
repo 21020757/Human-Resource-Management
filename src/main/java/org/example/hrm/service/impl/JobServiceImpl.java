@@ -46,7 +46,7 @@ public class JobServiceImpl implements JobService {
         return jobs.map(job -> {
             JobResponse jobResponse = new JobResponse();
             CommonUtils.copyPropertiesIgnoreNull(job, jobResponse);
-            jobResponse.setDepartmentId(job.getDepartment().getId());
+            jobResponse.setDepartmentName(job.getDepartment().getDepartmentName());
             return jobResponse;
         });
     }
@@ -56,8 +56,7 @@ public class JobServiceImpl implements JobService {
         Job job = jobRepository.findById(id).orElseThrow();
         JobResponse jobResponse = new JobResponse();
         CommonUtils.copyPropertiesIgnoreNull(job, jobResponse);
-        Long departmentId = job.getDepartment().getId();
-        jobResponse.setDepartmentId(departmentId);
+        jobResponse.setDepartmentName(job.getDepartment().getDepartmentName());
         return jobResponse;
     }
 
