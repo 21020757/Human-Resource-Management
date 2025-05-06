@@ -55,8 +55,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             jwtUtils.setTokenCookies(accessToken, refreshToken, response);
             CustomUserDetails userDetails = (CustomUserDetails) authenticationResponse.getPrincipal();
-            String position = employeeService.findByEmail(loginRequest.getEmail()).getPosition();
-            return new LoginRes(userDetails.getUser(), position);
+            Employee employee = employeeService.findByEmail(loginRequest.getEmail());
+            String position = employee.getPosition();
+            String departmentName = employee.getDepartment().getDepartmentName();
+            return new LoginRes(userDetails.getUser(), position, departmentName);
         } catch (InternalAuthenticationServiceException e) {
             Throwable cause = e.getCause();
             if (cause instanceof UserIsDisabledException) {
