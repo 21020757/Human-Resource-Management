@@ -2,20 +2,20 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.EmployeeDto;
-import org.example.hrm.dto.Metadata;
 import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Employee;
 import org.example.hrm.service.EmployeeService;
-import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/employees")
+@PreAuthorize("(hasRole('ADMIN') or hasRole('MANAGER')) or @customPermissionEvaluator.isHR(authentication)")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -50,6 +50,7 @@ public class EmployeeController {
         return ResponseFactory.success("Cập nhật nhân viên thành công!");
     }
     @GetMapping("/search")
+    @PreAuthorize("(hasRole('ADMIN') or hasRole('MANAGER')) or @customPermissionEvaluator.isHR(authentication)")
     public ResponseEntity<?> searchEmployee(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String position,
