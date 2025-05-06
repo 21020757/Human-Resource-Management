@@ -47,7 +47,7 @@ CREATE TABLE candidate
     last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     resume             LONGTEXT              NULL,
-    cv_letter          VARCHAR(255)          NULL,
+    cv_letter          LONGTEXT              NULL,
     applied_date       date                  NULL,
     CONSTRAINT pk_candidate PRIMARY KEY (id),
     INDEX idx_candidate_fullname (full_name)
@@ -120,7 +120,7 @@ CREATE TABLE employee_review
     score              DECIMAL(10,2)         NULL,
     employee_id        BIGINT                NULL,
     reviewer_id        BIGINT                NULL,
-    comment            VARCHAR(255)          NULL,
+    comment            LONGTEXT              NULL,
     CONSTRAINT pk_employee_review PRIMARY KEY (id)
 );
 
@@ -148,7 +148,7 @@ CREATE TABLE job
     last_modified_by   VARCHAR(50)           NULL DEFAULT 'system',
     last_modified_date datetime              NULL DEFAULT CURRENT_TIMESTAMP,
     job_title          VARCHAR(255)          NULL,
-    job_description    VARCHAR(255)          NULL,
+    job_description    LONGTEXT              NULL,
     salary             DECIMAL(10,2)         NULL,
     exp                INT                   NULL,
     location           VARCHAR(100)          NOT NULL,
@@ -188,8 +188,8 @@ CREATE TABLE request
     requested_date     date                  NULL,
     start_time         time                  NULL,
     end_time           time                  NULL,
-    note               VARCHAR(255)          NULL,
-    comment            VARCHAR(255)          NULL,
+    note               LONGTEXT              NULL,
+    comment            LONGTEXT              NULL,
     status             VARCHAR(100)          NULL DEFAULT 'PENDING',
     approved           BIT(1)                NULL default b'0',
     deleted            BIT(1)                NULL default b'0',
