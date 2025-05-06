@@ -18,5 +18,5 @@ public class CandidateResponse {
 
     private String cvLetter;
     private LocalDate appliedDate = LocalDate.now();
-    private Set<Long> jobIds;
+    private String jobPosition;
 }

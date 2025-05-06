@@ -42,10 +42,10 @@ public class CandidateServiceImpl implements CandidateService {
         Candidate candidate = candidateRepository.findById(id).orElseThrow();
         CandidateResponse response = new CandidateResponse();
         CommonUtils.copyPropertiesIgnoreNull(candidate, response);
-        response.setJobIds(
+        response.setJobPosition(
                 candidate.getJobs().stream()
-                        .map(Job::getId)
-                        .collect(Collectors.toSet())
+                        .map(Job::getPosition) // hoặc getPosition(), tùy tên field
+                        .collect(Collectors.joining(", ")) // nếu là 1 chuỗi
         );
 
         return response;
@@ -58,7 +58,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public Candidate create(CandidateDto dto) {
-        Candidate candidate = candidateRepository.findByEmail(dto.getEmail());
+        Candidate candidate = candidateRepository.findByEmailAndJobId(dto.getEmail(), dto.getJobId());
         if (candidate == null) {
             candidate = new Candidate();
             CommonUtils.copyPropertiesIgnoreNull(dto, candidate);
@@ -92,10 +92,10 @@ public class CandidateServiceImpl implements CandidateService {
         return page.map(candidate -> {
             CandidateResponse response = new CandidateResponse();
             CommonUtils.copyPropertiesIgnoreNull(candidate, response);
-            response.setJobIds(
+            response.setJobPosition(
                     candidate.getJobs().stream()
-                            .map(Job::getId)
-                            .collect(Collectors.toSet())
+                            .map(Job::getPosition) // hoặc getPosition(), tùy tên field
+                            .collect(Collectors.joining("")) // nếu là 1 chuỗi
             );
             return response;
         });
