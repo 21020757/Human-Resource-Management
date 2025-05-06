@@ -33,6 +33,11 @@ public class CandidateServiceImpl implements CandidateService {
 
 
     @Override
+    public Candidate findById(Long id) {
+        return candidateRepository.findById(id).orElseThrow();
+    }
+
+    @Override
     public Set<Candidate> findAllByIds(Set<Long> ids) {
         return candidateRepository.findAllByIdIn(ids);
     }
