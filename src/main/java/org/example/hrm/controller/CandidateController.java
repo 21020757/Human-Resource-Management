@@ -38,6 +38,12 @@ public class CandidateController {
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
+    @GetMapping("/{id:\\d+}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        Candidate candidate = candidateService.findById(id);
+        return ResponseFactory.success(candidate);
+    }
+
     @GetMapping("/{id:\\d+}/interviews")
     public ResponseEntity<?> getInterviews(
             @PathVariable Long id) {
@@ -50,7 +56,7 @@ public class CandidateController {
         Resource resume = candidateService.downloadResume(id);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=resume.pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"resume_" + id + ".pdf\"")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resume);
     }

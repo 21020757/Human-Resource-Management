@@ -14,14 +14,13 @@ import java.util.Set;
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     @Query(value = """
         SELECT * FROM candidate c
-        WHERE (:keyword IS NULL OR full_name LIKE CONCAT('%', :keyword, '%')
+        WHERE (:keyword IS NULL OR LOWER(c.full_name) LIKE LOWER(CONCAT('%', :keyword, '%')))
         """,
             countQuery = """
         SELECT COUNT(*) FROM candidate c
-        WHERE (:keyword IS NULL OR full_name LIKE CONCAT('%', :keyword, '%')
+        WHERE (:keyword IS NULL OR LOWER(c.full_name) LIKE LOWER(CONCAT('%', :keyword, '%')))
         """,
-            nativeQuery = true
-    )
+            nativeQuery = true)
     Page<Candidate> search(@Param("keyword") String keyword, Pageable pageable);
 
 

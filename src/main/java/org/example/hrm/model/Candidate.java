@@ -13,6 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class Candidate extends UserProfile {
+    @JsonIgnore
     private String resume;
     private String cvLetter;
     private LocalDate appliedDate;

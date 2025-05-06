@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Set;
 
 public interface CandidateService {
+    Candidate findById(Long id);
     Set<Candidate> findAllByIds(Set<Long> ids);
     Candidate create (CandidateDto dto);
     CandidateDto update(CandidateDto dto);
