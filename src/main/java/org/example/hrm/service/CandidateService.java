@@ -16,7 +16,7 @@ public interface CandidateService {
     Candidate create (CandidateDto dto);
     CandidateResponse update(CandidateDto dto);
     void delete(Long id);
-    Page<CandidateResponse> search (String keyword, Pageable pageable);
+    Page<CandidateResponse> search (String keyword, Boolean hasInterview, Pageable pageable);
     Resource downloadResume(Long id);
     Set<Interview> getInterviews(Long candidateId);
 }

@@ -34,8 +34,11 @@ public class CandidateController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(required = false) String keyword, Pageable pageable) {
-        Page<CandidateResponse> page = candidateService.search(keyword, pageable);
+    public ResponseEntity<?> search(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Boolean hasInterview,
+            Pageable pageable) {
+        Page<CandidateResponse> page = candidateService.search(keyword, hasInterview, pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 

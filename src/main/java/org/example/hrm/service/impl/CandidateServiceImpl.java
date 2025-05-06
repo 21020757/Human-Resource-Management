@@ -45,7 +45,7 @@ public class CandidateServiceImpl implements CandidateService {
         response.setJobPosition(
                 candidate.getJobs().stream()
                         .map(Job::getPosition) // hoặc getPosition(), tùy tên field
-                        .collect(Collectors.joining(", ")) // nếu là 1 chuỗi
+                        .collect(Collectors.joining("")) // nếu là 1 chuỗi
         );
 
         return response;
@@ -86,8 +86,8 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public Page<CandidateResponse> search(String keyword, Pageable pageable) {
-        Page<Candidate> page = candidateRepository.search(keyword, pageable);
+    public Page<CandidateResponse> search(String keyword, Boolean hasInterview, Pageable pageable) {
+        Page<Candidate> page = candidateRepository.search(keyword, hasInterview, pageable);
 
         return page.map(candidate -> {
             CandidateResponse response = new CandidateResponse();
