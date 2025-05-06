@@ -153,7 +153,7 @@ CREATE TABLE job
     exp                INT                   NULL,
     location           VARCHAR(100)          NOT NULL,
     position           VARCHAR(255)          NULL,
-    requirements       VARCHAR(255)          NULL,
+    requirements       LONGTEXT              NULL,
     posted_date        date                  NULL,
     closed_date        date                  NULL,
     active             BIT(1)                NOT NULL DEFAULT b'1',
