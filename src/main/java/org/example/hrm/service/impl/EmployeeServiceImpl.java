@@ -96,11 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                                   Boolean active,
                                   Pageable pageable) {
         Page<Employee> page;
-        if (isNoFilter(keyword, position, departmentId, active)) {
-            page = employeeRepository.findAll(pageable);
-        } else {
-            page = employeeRepository.search(keyword, position, departmentId, active, pageable);
-        }
+        page = employeeRepository.search(keyword, position, departmentId, active, pageable);
         return page;
     }
 

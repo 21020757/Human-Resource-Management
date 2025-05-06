@@ -50,7 +50,7 @@ CREATE TABLE candidate
     cv_letter          VARCHAR(255)          NULL,
     applied_date       date                  NULL,
     CONSTRAINT pk_candidate PRIMARY KEY (id),
-    FULLTEXT(full_name)
+    INDEX idx_candidate_fullname (full_name)
 );
 
 CREATE TABLE candidate_interview
@@ -105,7 +105,8 @@ CREATE TABLE employee
     department_id      BIGINT                NULL,
     active             BIT(1)                NOT NULL DEFAULT b'1',
     CONSTRAINT pk_employee PRIMARY KEY (id),
-    FULLTEXT(full_name, position)
+    INDEX idx_employee_fullname (full_name)
+    INDEX idx_employee_position (position)
 );
 
 CREATE TABLE employee_review
