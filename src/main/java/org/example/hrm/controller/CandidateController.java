@@ -2,6 +2,7 @@ package org.example.hrm.controller;
 
 import org.example.hrm.dto.CandidateDto;
 import org.example.hrm.dto.CustomResponse;
+import org.example.hrm.dto.response.CandidateResponse;
 import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Candidate;
 import org.example.hrm.model.Interview;
@@ -34,13 +35,13 @@ public class CandidateController {
 
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam(required = false) String keyword, Pageable pageable) {
-        Page<Candidate> page = candidateService.search(keyword, pageable);
+        Page<CandidateResponse> page = candidateService.search(keyword, pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @GetMapping("/{id:\\d+}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
-        Candidate candidate = candidateService.findById(id);
+        CandidateResponse candidate = candidateService.findById(id);
         return ResponseFactory.success(candidate);
     }
 

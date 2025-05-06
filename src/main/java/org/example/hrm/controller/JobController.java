@@ -1,17 +1,15 @@
 package org.example.hrm.controller;
 
-import org.example.hrm.dto.CustomResponse;
 import org.example.hrm.dto.JobDto;
+import org.example.hrm.dto.response.JobResponse;
 import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Job;
 import org.example.hrm.service.JobService;
-import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/jobs")
@@ -34,13 +32,13 @@ public class JobController {
             @RequestParam(required = false) String location,
             Pageable pageable
     ) {
-        Page<Job> page = jobService.search(keyword, active, location, pageable);
+        Page<JobResponse> page = jobService.search(keyword, active, location, pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @GetMapping("/{id:\\d+}")
     public ResponseEntity<?> getJobById(@PathVariable Long id) {
-        Job job = jobService.getJobById(id);
+        JobResponse job = jobService.getJobById(id);
         return ResponseFactory.success(job);
     }
 
