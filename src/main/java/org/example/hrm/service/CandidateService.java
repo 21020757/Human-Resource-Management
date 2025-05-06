@@ -1,6 +1,7 @@
 package org.example.hrm.service;
 
 import org.example.hrm.dto.CandidateDto;
+import org.example.hrm.dto.response.CandidateResponse;
 import org.example.hrm.model.Candidate;
 import org.example.hrm.model.Interview;
 import org.springframework.core.io.Resource;
@@ -10,12 +11,12 @@ import org.springframework.data.domain.Pageable;
 import java.util.Set;
 
 public interface CandidateService {
-    Candidate findById(Long id);
+    CandidateResponse findById(Long id);
     Set<Candidate> findAllByIds(Set<Long> ids);
     Candidate create (CandidateDto dto);
-    CandidateDto update(CandidateDto dto);
+    CandidateResponse update(CandidateDto dto);
     void delete(Long id);
-    Page<Candidate> search (String keyword, Pageable pageable);
+    Page<CandidateResponse> search (String keyword, Pageable pageable);
     Resource downloadResume(Long id);
     Set<Interview> getInterviews(Long candidateId);
 }

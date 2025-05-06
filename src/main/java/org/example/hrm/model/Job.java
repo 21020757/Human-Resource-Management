@@ -27,7 +27,7 @@ public class Job extends AbstractAuditingEntity {
     private LocalDate closedDate;
     private String location;
     private int exp;
-    private boolean active;
+    private Boolean active;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "department_id")

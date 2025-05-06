@@ -1,10 +1,12 @@
 package org.example.hrm.service.impl;
 
 import org.example.hrm.dto.CandidateDto;
+import org.example.hrm.dto.response.CandidateResponse;
 import org.example.hrm.model.Candidate;
 import org.example.hrm.model.Interview;
 import org.example.hrm.model.Job;
 import org.example.hrm.repository.CandidateRepository;
+import org.example.hrm.repository.JobRepository;
 import org.example.hrm.service.Base64Service;
 import org.example.hrm.service.CandidateService;
 import org.example.hrm.service.JobService;
@@ -17,24 +19,36 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
     private final CandidateRepository candidateRepository;
+    private final JobRepository jobRepository;
     private final JobService jobService;
     private final Base64Service base64Service;
 
-    public CandidateServiceImpl(CandidateRepository candidateRepository,
+    public CandidateServiceImpl(CandidateRepository candidateRepository, JobRepository jobRepository,
                                 JobService jobService, Base64Service base64Service) {
         this.candidateRepository = candidateRepository;
+        this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.base64Service = base64Service;
     }
 
 
     @Override
-    public Candidate findById(Long id) {
-        return candidateRepository.findById(id).orElseThrow();
+    public CandidateResponse findById(Long id) {
+        Candidate candidate = candidateRepository.findById(id).orElseThrow();
+        CandidateResponse response = new CandidateResponse();
+        CommonUtils.copyPropertiesIgnoreNull(candidate, response);
+        response.setJobIds(
+                candidate.getJobs().stream()
+                        .map(Job::getId)
+                        .collect(Collectors.toSet())
+        );
+
+        return response;
     }
 
     @Override
@@ -50,7 +64,7 @@ public class CandidateServiceImpl implements CandidateService {
             CommonUtils.copyPropertiesIgnoreNull(dto, candidate);
             candidate.setJobs(new HashSet<>());
         }
-        Job job = jobService.getJobById(dto.getJobId());
+        Job job = jobRepository.findById(dto.getJobId()).orElseThrow();
         candidate.getJobs().add(job);
         try {
             String resume = base64Service.encode(dto.getResume());
@@ -62,7 +76,7 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public CandidateDto update(CandidateDto dto) {
+    public CandidateResponse update(CandidateDto dto) {
         return null;
     }
 
@@ -72,8 +86,19 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public Page<Candidate> search(String keyword, Pageable pageable) {
-        return candidateRepository.search(keyword, pageable);
+    public Page<CandidateResponse> search(String keyword, Pageable pageable) {
+        Page<Candidate> page = candidateRepository.search(keyword, pageable);
+
+        return page.map(candidate -> {
+            CandidateResponse response = new CandidateResponse();
+            CommonUtils.copyPropertiesIgnoreNull(candidate, response);
+            response.setJobIds(
+                    candidate.getJobs().stream()
+                            .map(Job::getId)
+                            .collect(Collectors.toSet())
+            );
+            return response;
+        });
     }
 
     @Override
