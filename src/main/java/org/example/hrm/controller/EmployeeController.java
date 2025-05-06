@@ -55,7 +55,7 @@ public class EmployeeController {
             @RequestParam(required = false) String position,
             @RequestParam(name = "departmentId", required = false) Long departmentId,
             @RequestParam(required = false) Boolean active,
-            @PageableDefault(sort = {"fullName"},
+            @PageableDefault(sort = {"id"},
                     direction = Sort.Direction.ASC) Pageable pageable) {
         final Page<Employee> page = employeeService.search(keyword,
                 position,

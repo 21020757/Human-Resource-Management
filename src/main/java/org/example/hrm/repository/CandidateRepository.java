@@ -14,11 +14,11 @@ import java.util.Set;
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
     @Query(value = """
         SELECT * FROM candidate c
-        WHERE (:keyword IS NULL OR MATCH(full_name) AGAINST(:keyword IN BOOLEAN MODE))
+        WHERE (:keyword IS NULL OR full_name LIKE CONCAT('%', :keyword, '%')
         """,
             countQuery = """
         SELECT COUNT(*) FROM candidate c
-        WHERE (:keyword IS NULL OR MATCH(full_name) AGAINST(:keyword IN BOOLEAN MODE))
+        WHERE (:keyword IS NULL OR full_name LIKE CONCAT('%', :keyword, '%')
         """,
             nativeQuery = true
     )

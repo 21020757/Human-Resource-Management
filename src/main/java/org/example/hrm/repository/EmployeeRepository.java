@@ -16,15 +16,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> getAllEmployeeByDepartmentId(Long departmentId);
     List<Employee> findAllByActive(boolean active);
     @Query(value = """
-    SELECT * FROM employee 
-    WHERE (:keyword IS NULL OR MATCH(full_name, position) AGAINST(:keyword IN BOOLEAN MODE))
+    SELECT * FROM employee
+    WHERE (:keyword IS NULL OR full_name LIKE CONCAT('%', :keyword, '%') OR position LIKE CONCAT('%', :keyword, '%'))                                                                                    
     AND (:departmentId IS NULL OR department_id = :departmentId)
     AND (:position IS NULL OR position = :position)
     AND (:active IS NULL OR active = :active)
     """,
             countQuery = """
-    SELECT COUNT(*) FROM employee 
-    WHERE (:keyword IS NULL OR MATCH(full_name, position) AGAINST(:keyword IN BOOLEAN MODE))
+    SELECT COUNT(*) FROM employee
+    WHERE (:keyword IS NULL OR full_name LIKE CONCAT('%', :keyword, '%') OR position LIKE CONCAT('%', :keyword, '%'))
     AND (:departmentId IS NULL OR department_id = :departmentId)
     AND (:position IS NULL OR position = :position)
     AND (:active IS NULL OR active = :active)
@@ -35,7 +35,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                           @Param("departmentId") Long departmentId,
                           @Param("active") Boolean active,
                           Pageable pageable);
-
 
     int countByDepartmentId(Long departmentId);
 }
