@@ -68,7 +68,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException("Email không tồn tại!");
         } catch (BadCredentialsException e) {
-            throw new CustomAuthenticationException("Sai mật khẩu!");
+            throw new CustomAuthenticationException("Sai tài khoản hoặc mật khẩu!");
         }
     }
 
