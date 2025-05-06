@@ -112,9 +112,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException(request.getEmail() + " not found!");
         }
         CommonUtils.copyPropertiesIgnoreNull(request, user);
-        System.out.println(request.getRoleIds() + "vail");
         Set<Role> roles = roleService.findAllByIds(request.getRoleIds());
-        System.out.println(roles + "hehe");
         user.setRoles(roles);
         userRepository.save(user);
     }

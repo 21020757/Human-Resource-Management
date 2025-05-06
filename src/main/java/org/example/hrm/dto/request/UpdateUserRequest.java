@@ -11,5 +11,5 @@ public class UpdateUserRequest {
     private String fullName;
     private String email;
     private Set<Long> roleIds;
-    private boolean active;
+    private Boolean active;
 }
