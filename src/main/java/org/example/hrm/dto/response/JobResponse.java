@@ -18,5 +18,5 @@ public class JobResponse {
     private String location;
     private int exp;
     private Boolean active;
-    private Long departmentId;
+    private String departmentName;
 }
