@@ -4,11 +4,12 @@ import org.example.hrm.model.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("customPermissionEvaluator")
 public class CustomPermissionEvaluator {
     public boolean isHR(Authentication authentication) {
         if (authentication.getPrincipal() instanceof CustomUserDetails) {
             String position = ((CustomUserDetails) authentication.getPrincipal()).getPosition();
+            System.out.println(position + "hehe");
             return position != null && position.toLowerCase().contains("hr");
         }
         return false;
