@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email không tồn tại: " + email));
 
-        if (!user.isActive()) {
+        if (!user.getActive()) {
             throw new UserIsDisabledException("Tài khoản đã bị vô hiệu hóa: " + email);
         }
         Employee employee = employeeRepository.findEmployeeByEmail(email);
