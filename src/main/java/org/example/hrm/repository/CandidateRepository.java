@@ -25,6 +25,13 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
 
     Candidate findByEmail(String email);
+    @Query("""
+    SELECT c FROM Candidate c
+    JOIN c.jobs j
+    WHERE c.email = :email AND j.id = :jobId
+    """)
+    Candidate findByEmailAndJobId(@Param("email") String email, @Param("jobId") Long jobId);
+
 
     Set<Candidate> findAllByIdIn(Set<Long> ids);
 }
