@@ -11,11 +11,13 @@ public class LoginRes {
     private String email;
     private Set<Role> roles;
     private String position;
+    private String departmentName;
 
-    public LoginRes(User user, String position) {
+    public LoginRes(User user, String position, String departmentName) {
         this.fullName = user.getFullName();
         this.email = user.getEmail();
         this.roles = user.getRoles();
         this.position = position;
+        this.departmentName = departmentName;
     }
 }
