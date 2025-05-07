@@ -100,6 +100,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return page;
     }
 
+    @Override
+    public Page<Employee> getAll(Boolean hasContract, Pageable pageable) {
+        return employeeRepository.findAll(hasContract, pageable);
+    }
+
     private boolean isNoFilter(String keyword, String position, Long departmentId, Boolean active) {
         return (keyword == null || keyword.isBlank()) &&
                 (position == null || position.isBlank()) &&

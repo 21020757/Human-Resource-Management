@@ -50,7 +50,6 @@ public class EmployeeController {
         return ResponseFactory.success("Cập nhật nhân viên thành công!");
     }
     @GetMapping("/search")
-    @PreAuthorize("(hasRole('ADMIN') or hasRole('MANAGER')) or @customPermissionEvaluator.isHR(authentication)")
     public ResponseEntity<?> searchEmployee(
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String position,
@@ -65,6 +64,16 @@ public class EmployeeController {
                 pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> allEmployees(
+            @RequestParam Boolean hasContract,
+            Pageable pageable
+    ) {
+        Page<Employee> employees = employeeService.getAll(hasContract, pageable);
+        return ResponseFactory.paginationSuccess(employees, pageable);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);

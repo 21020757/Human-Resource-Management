@@ -14,6 +14,7 @@ import org.example.hrm.model.enumeration.AttendanceStatus;
 import org.example.hrm.repository.AttendanceRepository;
 import org.example.hrm.repository.EmployeeRepository;
 import org.example.hrm.service.AttendanceService;
+import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -49,13 +50,10 @@ public class AttendanceServiceImpl implements AttendanceService {
                 attendanceDto.getEmployeeId(),
                 attendanceDto.getDate()
         );
-        attendance.setCheckInTime(attendanceDto.getCheckInTime());
-        attendance.setCheckOutTime(attendanceDto.getCheckOutTime());
-
+        CommonUtils.copyPropertiesIgnoreNull(attendanceDto, attendance);
         BigDecimal totalHours = calculateTotalHours(attendance.getCheckInTime(), attendanceDto.getCheckOutTime());
         attendance.setTotalWorkingTime(totalHours);
         attendance.setWorkDays(calculateWorkdays(totalHours));
-        attendance.setStatus(attendanceDto.getStatus());
         attendanceRepository.save(attendance);
     }
 

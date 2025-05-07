@@ -69,7 +69,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public Page<ContractResponse> search(String keyword, Pageable pageable) {
+    public Page<ContractResponse> search(String keyword, Boolean hasContract, Pageable pageable) {
         Page<Contract> contracts = contractRepository.searchByEmployeeName(keyword, pageable);
         return contracts.map(ContractResponse::new);
     }

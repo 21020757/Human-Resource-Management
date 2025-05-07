@@ -48,6 +48,18 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                                                     Pageable pageable);
 
 
+    @Query("""
+    SELECT e FROM Employee e
+    LEFT JOIN Contract c ON c.employee = e
+    WHERE (:hasContract = true AND c.id IS NOT NULL)
+       OR (:hasContract = false AND c.id IS NULL)
+""")
+    Page<Employee> findAll(
+            @Param("hasContract") Boolean hasContract,
+            Pageable pageable
+    );
+
+
 
     int countByDepartmentId(Long departmentId);
 }

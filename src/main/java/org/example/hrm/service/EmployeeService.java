@@ -17,4 +17,5 @@ public interface EmployeeService {
                              Long departmentId,
                              Boolean active,
                              Pageable pageable);
+    Page<Employee> getAll(Boolean hasContract, Pageable pageable);
 }

@@ -29,9 +29,10 @@ public class ContractController {
     @GetMapping("/search")
     public ResponseEntity<?> search(
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Boolean hasContract,
             Pageable pageable
     ) {
-        Page<ContractResponse> page = contractService.search(keyword, pageable);
+        Page<ContractResponse> page = contractService.search(keyword, hasContract, pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
