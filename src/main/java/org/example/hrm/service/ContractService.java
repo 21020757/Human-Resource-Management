@@ -13,5 +13,5 @@ public interface ContractService {
     Contract update(ContractDto dto);
     void delete(Long id);
     Contract findByEmployeeId(Long employeeId);
-    Page<ContractResponse> search(String keyword, Pageable pageable);
+    Page<ContractResponse> search(String keyword, Boolean hasContract, Pageable pageable);
 }

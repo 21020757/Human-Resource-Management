@@ -15,9 +15,11 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
     @Query("""
     SELECT c FROM Contract c
-    WHERE (:keyword IS NULL OR LOWER(c.employee.fullName) LIKE LOWER(CONCAT('%', :keyword, '%'))
-    AND c.active = true)
+    WHERE (:keyword IS NULL OR LOWER(c.employee.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')))
+    AND c.active = true
 """)
-    Page<Contract> searchByEmployeeName(@Param("keyword") String keyword, Pageable pageable);
+    Page<Contract> searchByEmployeeName(
+            @Param("keyword") String keyword,
+            Pageable pageable);
 
 }
