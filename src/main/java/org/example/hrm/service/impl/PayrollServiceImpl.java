@@ -54,7 +54,7 @@ public class PayrollServiceImpl implements PayrollService {
                     salary.setEmployee(employee);
                     salary.setMonth(month);
                     salary.setYear(year);
-                    salary.setBaseSalary(null);
+                    salary.setBaseSalary(contract.getSalary());
                     salary.setBonus(BigDecimal.ZERO);
                     salary.setDeduction(BigDecimal.ZERO);
                     salaryRepository.save(salary);
@@ -71,6 +71,7 @@ public class PayrollServiceImpl implements PayrollService {
 
     @Override
     public Page<SalaryDto> getSalaryByCurrent(Authentication authentication, int month, int year, Pageable pageable) {
+        calculateSalary();
         Employee employee = CommonUtils.getCurrentUser(authentication);
         Page<Salary> salaries = salaryRepository.findAllByEmployeeIdAndMonthAndYear(employee.getId(), month, year, pageable);
         return salaries.map(SalaryDto::new);
@@ -124,9 +125,10 @@ public class PayrollServiceImpl implements PayrollService {
                 .map(a -> a.getWorkDays() != null ? a.getWorkDays() : BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        System.out.println(workDays + "hehe");
         BigDecimal dailyRate = baseSalary.divide(Constants.MONTHLY_WORK_DAYS, 2, RoundingMode.HALF_EVEN);
         BigDecimal insurance = baseSalary.multiply(BigDecimal.valueOf(0.01));
-
+        System.out.println(dailyRate.multiply(workDays) + "kiki");
         return dailyRate.multiply(workDays)
                 .add(bonus)
                 .subtract(deductions)

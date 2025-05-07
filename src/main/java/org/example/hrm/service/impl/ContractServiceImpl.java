@@ -53,7 +53,7 @@ public class ContractServiceImpl implements ContractService {
             salary.setEmployee(employee);
             salary.setMonth(month);
             salary.setYear(year);
-            salary.setBaseSalary(null);
+            salary.setBaseSalary(contract.getSalary());
             salary.setBonus(BigDecimal.ZERO);
             salary.setDeduction(BigDecimal.ZERO);
             salaryRepository.save(salary);
