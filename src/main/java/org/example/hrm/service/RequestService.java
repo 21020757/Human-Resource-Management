@@ -12,9 +12,9 @@ import java.time.LocalDate;
 
 public interface RequestService {
     Request create(RequestDto dto, Authentication authentication);
-    Request getById(Long id);
-    Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable, LocalDate fromDate, LocalDate toDate);
+    RequestDto getById(Long id);
+    Page<RequestDto> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable, LocalDate fromDate, LocalDate toDate);
     void confirm(RequestDto dto, Authentication authentication);
     void delete(Long id);
-    Page<Request> getCurrent(Authentication authentication, RequestType requestType, RequestStatus requestStatus, LocalDate fromDate, LocalDate toDate, Pageable pageable);
+    Page<RequestDto> getCurrent(Authentication authentication, RequestType requestType, RequestStatus requestStatus, LocalDate fromDate, LocalDate toDate, Pageable pageable);
 }

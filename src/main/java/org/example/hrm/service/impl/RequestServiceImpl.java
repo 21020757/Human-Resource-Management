@@ -52,13 +52,23 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Request getById(Long id) {
-        return requestRepository.findById(id).orElse(null);
+    public RequestDto getById(Long id) {
+        Request request = requestRepository.findById(id).orElseThrow();
+        RequestDto requestDto = new RequestDto(request);
+        requestDto.setEmployeeName(request.getEmployee().getFullName());
+
+        return requestDto;
     }
 
     @Override
-    public Page<Request> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable, LocalDate fromDate, LocalDate toDate) {
-        return requestRepository.search(employeeId, requestType, requestStatus, fromDate, toDate, pageable);
+    public Page<RequestDto> search(Long employeeId, RequestType requestType, RequestStatus requestStatus, Pageable pageable, LocalDate fromDate, LocalDate toDate) {
+        Page<Request> requests = requestRepository.search(employeeId, requestType, requestStatus, fromDate, toDate, pageable);
+
+        return requests.map(request -> {
+            RequestDto requestDto = new RequestDto(request);
+            requestDto.setEmployeeName(request.getEmployee().getFullName());
+            return requestDto;
+        });
     }
 
     @Override
@@ -83,8 +93,15 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Page<Request> getCurrent(Authentication authentication, RequestType requestType, RequestStatus requestStatus, LocalDate fromDate, LocalDate toDate, Pageable pageable) {
+    public Page<RequestDto> getCurrent(Authentication authentication, RequestType requestType, RequestStatus requestStatus, LocalDate fromDate, LocalDate toDate, Pageable pageable) {
         Employee employee = CommonUtils.getCurrentUser(authentication);
-        return requestRepository.search(employee.getId(), requestType, requestStatus, fromDate, toDate, pageable);
+
+        Page<Request> requests = requestRepository.search(employee.getId(), requestType, requestStatus, fromDate, toDate, pageable);
+
+        return requests.map(request -> {
+            RequestDto requestDto = new RequestDto(request);
+            requestDto.setEmployeeName(request.getEmployee().getFullName());
+            return requestDto;
+        });
     }
 }
