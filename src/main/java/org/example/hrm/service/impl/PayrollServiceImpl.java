@@ -65,6 +65,7 @@ public class PayrollServiceImpl implements PayrollService {
 
     @Override
     public Page<SalaryDto> getSalaryByEmployee(Long employeeId, int month, int year, Pageable pageable) {
+        calculateSalary();
         Page<Salary> salaries = salaryRepository.findAllByEmployeeIdAndMonthAndYear(employeeId, month, year, pageable);
         return salaries.map(SalaryDto::new);
     }
