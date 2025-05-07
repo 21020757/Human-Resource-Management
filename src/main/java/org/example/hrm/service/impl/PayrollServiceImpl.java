@@ -11,14 +11,17 @@ import org.example.hrm.repository.ContractRepository;
 import org.example.hrm.repository.EmployeeRepository;
 import org.example.hrm.repository.SalaryRepository;
 import org.example.hrm.service.PayrollService;
+import org.example.hrm.util.CommonUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PayrollServiceImpl implements PayrollService {
@@ -45,17 +48,34 @@ public class PayrollServiceImpl implements PayrollService {
             int year = LocalDate.now().getYear();
             Contract contract = contractRepository.findById(employee.getId()).orElse(null);
             if(contract != null) {
-                Salary salary = new Salary();
-                salary.setEmployee(employee);
-                salary.setMonth(month);
-                salary.setYear(year);
-                salary.setBaseSalary(contract.getSalary());
-                salary.setBonus(BigDecimal.ZERO);
-                salary.setDeduction(BigDecimal.ZERO);
-                salaryRepository.save(salary);
+                Salary salary = salaryRepository.findByEmployeeIdAndMonthAndYear(employee.getId(), month, year);
+                if(salary == null) {
+                    salary = new Salary();
+                    salary.setEmployee(employee);
+                    salary.setMonth(month);
+                    salary.setYear(year);
+                    salary.setBaseSalary(null);
+                    salary.setBonus(BigDecimal.ZERO);
+                    salary.setDeduction(BigDecimal.ZERO);
+                    salaryRepository.save(salary);
+                }
             }
         }
     }
+
+    @Override
+    public Page<SalaryDto> getSalaryByEmployee(Long employeeId, int month, int year, Pageable pageable) {
+        Page<Salary> salaries = salaryRepository.findAllByEmployeeIdAndMonthAndYear(employeeId, month, year, pageable);
+        return salaries.map(SalaryDto::new);
+    }
+
+    @Override
+    public Page<SalaryDto> getSalaryByCurrent(Authentication authentication, int month, int year, Pageable pageable) {
+        Employee employee = CommonUtils.getCurrentUser(authentication);
+        Page<Salary> salaries = salaryRepository.findAllByEmployeeIdAndMonthAndYear(employee.getId(), month, year, pageable);
+        return salaries.map(SalaryDto::new);
+    }
+
 
     @Override
     public void calculateSalary() {
@@ -66,10 +86,13 @@ public class PayrollServiceImpl implements PayrollService {
             LocalDate startDate = LocalDate.of(year, month, 1);
             LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
             Salary salary = salaryRepository.findByEmployeeIdAndMonthAndYear(employee.getId(), month, year);
+            if(salary == null) {
+                continue;
+            }
             List<Attendance> attendances = attendanceRepository
                     .findByEmployeeAndDateBetween(employee, startDate, endDate);
             BigDecimal netSalary = calculateNetSalary(attendances,
-                    salary.getBaseSalary(),
+                    salary.getBaseSalary() != null ? salary.getBaseSalary() : BigDecimal.ZERO,
                     salary.getBonus(),
                     salary.getDeduction());
             salary.setNetSalary(netSalary);
@@ -78,12 +101,14 @@ public class PayrollServiceImpl implements PayrollService {
     }
 
     @Override
-    public Page<Salary> getSalary(final Pageable pageable) {
-        return salaryRepository.findAll(pageable);
+    public Page<SalaryDto> getSalary(int month, int year, final Pageable pageable) {
+        calculateSalary();
+        Page<Salary> salaries = salaryRepository.findAllByMonthAndYear(month, year, pageable);
+        return salaries.map(SalaryDto::new);
     }
 
     @Override
-    public Page<Salary> getSalaryByEmployeeId(Pageable pageable, Long employeeId) {
+    public Page<SalaryDto> getSalaryByEmployeeId(Pageable pageable, Long employeeId) {
         return null;
     }
 
@@ -91,12 +116,21 @@ public class PayrollServiceImpl implements PayrollService {
                                          BigDecimal baseSalary,
                                          BigDecimal bonus,
                                          BigDecimal deductions) {
+        baseSalary = baseSalary != null ? baseSalary : BigDecimal.ZERO;
+        bonus = bonus != null ? bonus : BigDecimal.ZERO;
+        deductions = deductions != null ? deductions : BigDecimal.ZERO;
+
         BigDecimal workDays = attendances.stream()
-                .map(Attendance::getWorkDays)
+                .map(a -> a.getWorkDays() != null ? a.getWorkDays() : BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return baseSalary.multiply(workDays.divide(Constants.MONTHLY_WORK_DAYS, 2, RoundingMode.HALF_EVEN))
+
+        BigDecimal dailyRate = baseSalary.divide(Constants.MONTHLY_WORK_DAYS, 2, RoundingMode.HALF_EVEN);
+        BigDecimal insurance = baseSalary.multiply(BigDecimal.valueOf(0.01));
+
+        return dailyRate.multiply(workDays)
                 .add(bonus)
                 .subtract(deductions)
-                .subtract(baseSalary.multiply(BigDecimal.valueOf(0.01)));
+                .subtract(insurance);
     }
+
 }

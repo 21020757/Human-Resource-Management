@@ -70,7 +70,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public Page<EmployeeAttendanceDto> getAllAttendanceByEmployee(int month, int year, Pageable pageable) {
 
-        System.out.println(year + " " + month + "hehe");
         LocalDate startDate = LocalDate.of(year, month, 1); // LocalDate.of(2025, 5, 1)
         LocalDate endDate = LocalDate.of(year, month, startDate.lengthOfMonth());
 
