@@ -79,7 +79,7 @@ public class AttendanceController {
     }
 
     @PutMapping
-    @PreAuthorize("(hasRole('ADMIN') or hasRole('MANAGER')) and @customPermissionEvaluator.isHR(authentication)")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('MANAGER') or @customPermissionEvaluator.isHR(authentication))")
     public ResponseEntity<?> updateAttendance(@RequestBody AttendanceDto attendanceDto) {
         attendanceService.updateAttendance(attendanceDto);
         return ResponseFactory.success("Cập nhật thành công!");
