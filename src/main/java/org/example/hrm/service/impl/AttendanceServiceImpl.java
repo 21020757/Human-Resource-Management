@@ -5,13 +5,17 @@ import org.example.hrm.constant.WorkLocation;
 import org.example.hrm.dto.AttendanceDto;
 import org.example.hrm.dto.AttendanceRequest;
 import org.example.hrm.dto.AttendanceResponse;
+import org.example.hrm.dto.response.EmployeeAttendanceDto;
 import org.example.hrm.exception.CoreErrorCode;
 import org.example.hrm.exception.CoreException;
 import org.example.hrm.model.Attendance;
+import org.example.hrm.model.Employee;
 import org.example.hrm.model.enumeration.AttendanceStatus;
 import org.example.hrm.repository.AttendanceRepository;
+import org.example.hrm.repository.EmployeeRepository;
 import org.example.hrm.service.AttendanceService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +24,23 @@ import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
+    private final EmployeeRepository employeeRepository;
     private static final double EARTH_RADIUS_KM = 6371.0;
     private static final double ACCEPTABLE_DISTANCE = WorkLocation.ACCEPTABLE_DISTANCE;
     private static final double officeLat = WorkLocation.latitude;
     private static final double officeLng = WorkLocation.longitude;
     private static final LocalTime CHECK_IN_DEADLINE = Constants.CHECK_IN_DEADLINE;
 
-    public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository) {
         this.attendanceRepository = attendanceRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -60,6 +68,28 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         return checkOut(attendance, request);
     }
+
+    @Override
+    public Page<EmployeeAttendanceDto> getAllAttendanceByEmployee(int month, int year, Pageable pageable) {
+
+        System.out.println(year + " " + month + "hehe");
+        LocalDate startDate = LocalDate.of(year, month, 1); // LocalDate.of(2025, 5, 1)
+        LocalDate endDate = LocalDate.of(year, month, startDate.lengthOfMonth());
+
+        // Lấy tất cả employee có tham gia chấm công trong tháng đó
+        Page<Employee> employees = employeeRepository.findAllWithAttendanceInDateRange(startDate, endDate, pageable);
+
+        List<EmployeeAttendanceDto> dtoList = employees.getContent().stream()
+                .map(employee -> {
+                    List<Attendance> attendances = attendanceRepository
+                            .findAllByEmployeeAndDateBetween(employee, startDate, endDate);
+                    return new EmployeeAttendanceDto(employee, attendances);
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtoList, pageable, employees.getTotalElements());
+    }
+
 
     @Override
     public Page<Attendance> findByFilters(Long employeeId,
