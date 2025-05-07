@@ -47,7 +47,7 @@ public class RequestController {
             @RequestParam(required = false) LocalDate fromDate,
             @RequestParam(required = false) LocalDate toDate,
             Pageable pageable) {
-        Page<Request> page = requestService.getCurrent(authentication, requestType, requestStatus, fromDate, toDate, pageable);
+        Page<RequestDto> page = requestService.getCurrent(authentication, requestType, requestStatus, fromDate, toDate, pageable);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
@@ -59,7 +59,7 @@ public class RequestController {
             @RequestParam(required = false) LocalDate fromDate,
             @RequestParam(required = false) LocalDate toDate,
             Pageable pageable) {
-        Page<Request> page = requestService.search(employeeId, requestType, requestStatus, pageable, fromDate, toDate);
+        Page<RequestDto> page = requestService.search(employeeId, requestType, requestStatus, pageable, fromDate, toDate);
         return ResponseFactory.paginationSuccess(page, pageable);
     }
 
