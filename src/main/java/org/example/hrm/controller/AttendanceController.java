@@ -1,6 +1,7 @@
 package org.example.hrm.controller;
 
 import org.example.hrm.dto.*;
+import org.example.hrm.dto.response.EmployeeAttendanceDto;
 import org.example.hrm.dto.response.ResponseFactory;
 import org.example.hrm.model.Attendance;
 import org.example.hrm.model.Employee;
@@ -35,7 +36,7 @@ public class AttendanceController {
         AttendanceResponse response = attendanceService.recordAttendance(email, attendanceRequest);
         return ResponseEntity.ok(CustomResponse.builder()
                         .data(response)
-                        .message("Attendance record successful!").build());
+                        .message("Ghi nhận checkin/checkout thành công!").build());
     }
 
     @GetMapping("/current")
@@ -53,6 +54,16 @@ public class AttendanceController {
                 .data(page.getContent())
                 .metadata(CommonUtils.buildMetadata(page, pageable))
                 .message("Attendance records retrieved for user" + email).build());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllAttendance(
+            @RequestParam(defaultValue = "#{T(java.time.Year).now().value}") int year,
+            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().monthValue}") int month,
+            Pageable pageable
+    ) {
+        Page<EmployeeAttendanceDto> page = attendanceService.getAllAttendanceByEmployee(month, year, pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
     }
 
     @GetMapping("/by-employee/{employeeId}")
