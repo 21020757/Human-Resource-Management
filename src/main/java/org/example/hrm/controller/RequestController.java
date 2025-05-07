@@ -39,6 +39,18 @@ public class RequestController {
         return ResponseFactory.success("Xác nhận thành công!");
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrent(
+            Authentication authentication,
+            @RequestParam(required = false) RequestType requestType,
+            @RequestParam(required = false) RequestStatus requestStatus,
+            @RequestParam(required = false) LocalDate fromDate,
+            @RequestParam(required = false) LocalDate toDate,
+            Pageable pageable) {
+        Page<Request> page = requestService.getCurrent(authentication, requestType, requestStatus, fromDate, toDate, pageable);
+        return ResponseFactory.paginationSuccess(page, pageable);
+    }
+
     @GetMapping
     public ResponseEntity<?> search(
             @RequestParam(required = false) Long employeeId,

@@ -40,7 +40,5 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate,
             Pageable pageable);
-
-
     Request findByEmployeeIdAndRequestedDateAndRequestTypeAndDeletedIsFalse(Long employeeId, LocalDate requestedDate, RequestType requestType);
 }

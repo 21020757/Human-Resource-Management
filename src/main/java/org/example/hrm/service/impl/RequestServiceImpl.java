@@ -81,4 +81,10 @@ public class RequestServiceImpl implements RequestService {
         request.setDeleted(true);
         requestRepository.save(request);
     }
+
+    @Override
+    public Page<Request> getCurrent(Authentication authentication, RequestType requestType, RequestStatus requestStatus, LocalDate fromDate, LocalDate toDate, Pageable pageable) {
+        Employee employee = CommonUtils.getCurrentUser(authentication);
+        return requestRepository.search(employee.getId(), requestType, requestStatus, fromDate, toDate, pageable);
+    }
 }
